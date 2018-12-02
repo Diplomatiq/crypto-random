@@ -1,0 +1,6 @@
+src/
+test/
+.editorconfig
+.prettierignore
+.prettierrc
+tsconfig.json
