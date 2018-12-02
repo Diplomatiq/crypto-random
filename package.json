@@ -2,6 +2,16 @@
   "name": "@diplomatiq/crypto-random",
   "version": "0.0.0",
   "description": "Generate cryptographically strong random integers (optionally from specific intervals), boolean values, strings with uniformly distributed random characters from custom character sets.",
+  "main": "dist/main.js",
+  "module": "dist/main.js",
+  "typings": "dist/main.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -r ./dist/",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run test",
+    "test": "echo \"No tests specified\""
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Diplomatiq/crypto-random.git"
