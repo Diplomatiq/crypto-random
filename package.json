@@ -1,0 +1,26 @@
+{
+  "name": "@diplomatiq/crypto-random",
+  "version": "0.0.0",
+  "description": "Generate cryptographically strong random integers (optionally from specific intervals), boolean values, strings with uniformly distributed random characters from custom character sets.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Diplomatiq/crypto-random.git"
+  },
+  "keywords": [
+    "random",
+    "generation",
+    "secure",
+    "strong",
+    "cryptography",
+    "number",
+    "string",
+    "uniform",
+    "distribution"
+  ],
+  "author": "Diplomatiq",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Diplomatiq/crypto-random/issues"
+  },
+  "homepage": "https://github.com/Diplomatiq/crypto-random#readme"
+}
