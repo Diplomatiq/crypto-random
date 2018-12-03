@@ -32,5 +32,8 @@
   "bugs": {
     "url": "https://github.com/Diplomatiq/crypto-random/issues"
   },
-  "homepage": "https://github.com/Diplomatiq/crypto-random#readme"
+  "homepage": "https://github.com/Diplomatiq/crypto-random#readme",
+  "devDependencies": {
+    "typescript": "^3.2.1"
+  }
 }
