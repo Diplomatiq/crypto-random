@@ -5,6 +5,9 @@
   "main": "dist/main.js",
   "module": "dist/main.js",
   "types": "dist/main.d.ts",
+  "engines": {
+    "node": ">=9.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "clean": "rm -r ./dist/",
@@ -34,6 +37,7 @@
   },
   "homepage": "https://github.com/Diplomatiq/crypto-random#readme",
   "devDependencies": {
+    "@types/node": "^10.12.12",
     "typescript": "^3.2.1"
   }
 }
