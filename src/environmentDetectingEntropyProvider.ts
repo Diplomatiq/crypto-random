@@ -1,4 +1,6 @@
-export class EnvironmentDetectingEntropyProvider {
+import { EntropyProvider } from './entropyProvider';
+
+export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
     /**
      * The crypto implementation used in the browser. The window.crypto object is used.
      */
@@ -17,18 +19,18 @@ export class EnvironmentDetectingEntropyProvider {
     /**
      * The environment in which the package is run.
      */
-    private readonly ENVIRONMENT: 'browser' | 'node';
+    private readonly environment: 'browser' | 'node';
 
     constructor() {
         if (typeof window !== 'undefined' && typeof window.document !== 'undefined') {
-            this.ENVIRONMENT = 'browser';
+            this.environment = 'browser';
             if (typeof window.crypto !== 'undefined' && typeof window.crypto.getRandomValues !== 'undefined') {
                 this.browserCrypto = window.crypto;
             } else {
                 throw new Error('window.crypto.getRandomValues not available');
             }
         } else if (typeof process !== 'undefined' && process.versions && process.versions.node) {
-            this.ENVIRONMENT = 'node';
+            this.environment = 'node';
             try {
                 this.nodeCrypto = require('crypto');
             } catch (e) {
@@ -43,10 +45,13 @@ export class EnvironmentDetectingEntropyProvider {
      * Puts random values into the given @param array in a browser environment.
      * If the array's length is greater than the general @member BROWSER_ENTROPY_QUOTA_BYTES,
      * it is divided into chunks, and filled chunk-by-chunk.
-     *
-     * Can be only called, if @member ENVIRONMENT === 'browser'.
+     * Can be only called, if @member ENVIRONMENT is 'browser'.
      */
     private async getRandomValuesBrowser<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
+        if (this.environment !== 'browser') {
+            throw new Error('not in browser environment');
+        }
+
         if (array.byteLength <= EnvironmentDetectingEntropyProvider.BROWSER_ENTROPY_QUOTA_BYTES) {
             return this.browserCrypto!.getRandomValues(array);
         }
@@ -64,18 +69,24 @@ export class EnvironmentDetectingEntropyProvider {
             this.browserCrypto!.getRandomValues(chunkToFill);
             remainingBytes -= availableEntropyBytes;
         }
+
         return array;
     }
 
     /**
      * Puts random values into the given @param array in a Node.js environment.
-     * Can be only called, if @member ENVIRONMENT === 'node'.
+     * Can be only called, if @member ENVIRONMENT is 'node'.
      */
     private async getRandomValuesNode<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
+        if (this.environment !== 'node') {
+            throw new Error('not in node environment');
+        }
+
         return new Promise<T>((resolve, reject) => {
             this.nodeCrypto.randomFill(array, (error: Error | null, array: T) => {
                 if (error) {
                     reject(error);
+                    return;
                 }
 
                 resolve(array);
@@ -84,10 +95,10 @@ export class EnvironmentDetectingEntropyProvider {
     }
 
     /**
-     * Puts random values into the given @param array parameter.
+     * Puts random values into the given @param array, and returns the array.
      */
     public async getRandomValues<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
-        switch (this.ENVIRONMENT) {
+        switch (this.environment) {
             case 'browser':
                 return await this.getRandomValuesBrowser(array);
             case 'node':
