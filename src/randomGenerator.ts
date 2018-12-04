@@ -141,8 +141,11 @@ export class RandomGenerator {
      * The lowest possible value of @param min is 0.
      * The highest possible value of @param max is @var Number.MAX_SAFE_INTEGER.
      * The @param max - @param min + 1 <= @member MAX_ALPHABET_LEN inequality must be kept true.
+     *
+     * If needing more than one integer at once from a given interval, use @param howMany. This will reduce the number
+     * of times calling the crypto API, making the execution faster.
      */
-    public async integer(min: number, max: number): Promise<number> {
+    public async integer(min: number, max: number, howMany: number = 1): Promise<number[]> {
         if (min < 0) {
             throw new Error('min must be greater than or equal to 0');
         }
@@ -159,6 +162,10 @@ export class RandomGenerator {
             throw new Error(`max must be less than or equal to ${Number.MAX_SAFE_INTEGER}`);
         }
 
+        if (howMany <= 0) {
+            throw new Error('howMany must be greater than 0');
+        }
+
         if (max <= min) {
             throw new Error('max must be greater than min');
         }
@@ -168,8 +175,8 @@ export class RandomGenerator {
             throw new Error(`max - min + 1 must be less than or equal to ${RandomGenerator.MAX_ALPHABET_LEN}`);
         }
 
-        const [numberIndex] = await this.getUniformlyDistributedRandomCharIndexesOfAlphabet(alphabetLength, 1);
-        return min + numberIndex;
+        const numberIndexes = await this.getUniformlyDistributedRandomCharIndexesOfAlphabet(alphabetLength, howMany);
+        return numberIndexes.map(i => min + i);
     }
 
     /**
@@ -235,7 +242,7 @@ export class RandomGenerator {
      * Returns a cryptographically strong randomly generated boolean value.
      */
     public async boolean(): Promise<boolean> {
-        const numericBoolean = await this.integer(0, 1);
+        const [numericBoolean] = await this.integer(0, 1);
         return numericBoolean === 1;
     }
 }
