@@ -40,7 +40,6 @@ export class RandomGenerator {
         }
 
         let typedArray: Uint8Array | Uint16Array | Uint32Array;
-
         try {
             if (alphabetLength <= 0x100) {
                 typedArray = new Uint8Array(desiredRandomLength);
@@ -58,9 +57,9 @@ export class RandomGenerator {
 
     /**
      * To be able to generate uniformly distributed character sets, we need the remainder of an alphabet, based on the
-     * source intervals, which random values will come from.
-     * If the alphabet is at most 256 characters, then Uint8 values are generated, so we need the modulo 256 of the
-     * @param alphabetLength, and so on.
+     * random-target source intervals.
+     * If the alphabet contains at most 256 characters, then Uint8 values are generated, so we need the modulo 256 of
+     * the @param alphabetLength, and so on.
      */
     private async getRemainderForAlphabet(alphabetLength: number): Promise<number> {
         if (alphabetLength <= 0) {
@@ -109,10 +108,6 @@ export class RandomGenerator {
             const remainingCount = howMany - charIndexes.length;
             const random = await this.getRandomArrayForAlphabet(alphabetLength, remainingCount);
             for (let i = 0; i < random.length; i++) {
-                if (charIndexes.length >= howMany) {
-                    break;
-                }
-
                 // discrete uniform distribution does not include values smaller than the remainder
                 if (random[i] < remainder) {
                     continue;
@@ -144,8 +139,8 @@ export class RandomGenerator {
      * Returns a cryptographically strong randomly generated positive integer between @param min and @param max,
      * inclusive.
      * The lowest possible value of @param min is 0.
-     * The highest possible value of @param max is @member Number.MAX_SAFE_INTEGER.
-     * The @param max - @param min + 1 <= @member MAX_ALPHABET_LEN unequality must be kept true.
+     * The highest possible value of @param max is @var Number.MAX_SAFE_INTEGER.
+     * The @param max - @param min + 1 <= @member MAX_ALPHABET_LEN inequality must be kept true.
      */
     public async integer(min: number, max: number): Promise<number> {
         if (min < 0) {
