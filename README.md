@@ -1,6 +1,6 @@
 # crypto-random
 
-Generate cryptographically strong random integers from custom intervals, boolean values, strings with uniformly distributed random characters from custom character sets.
+TypeScript/JavaScript library for generating cryptographically strong random integers from custom intervals, boolean values, strings with uniformly distributed random characters from custom character sets.
 
 ---
 
