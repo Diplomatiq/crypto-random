@@ -42,10 +42,10 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
     }
 
     /**
-     * Puts random values into the given @param array in a browser environment.
+     * Puts random values into the given @param array in a browser environment, and returns the array.
      * If the array's length is greater than the general @member BROWSER_ENTROPY_QUOTA_BYTES,
      * it is divided into chunks, and filled chunk-by-chunk.
-     * Can be only called, if @member ENVIRONMENT is 'browser'.
+     * Can be only called, if @member environment is 'browser'.
      */
     private async getRandomValuesBrowser<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
         if (this.environment !== 'browser') {
@@ -74,8 +74,8 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
     }
 
     /**
-     * Puts random values into the given @param array in a Node.js environment.
-     * Can be only called, if @member ENVIRONMENT is 'node'.
+     * Puts random values into the given @param array in a Node.js environment, and returns the array.
+     * Can be only called, if @member environment is 'node'.
      */
     private async getRandomValuesNode<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
         if (this.environment !== 'node') {
