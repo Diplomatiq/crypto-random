@@ -1,32 +1,51 @@
 import { expect } from 'chai';
+import { EnvironmentDetectingEntropyProvider } from '../src/environmentDetectingEntropyProvider';
+import { spy, SinonSpy } from 'sinon';
 import { RandomGenerator } from '../src/randomGenerator';
+import { EntropyProvider } from '../src/entropyProvider';
 
 describe('RandomGenerator', () => {
+    let entropyProvider: EntropyProvider;
+    let entropyProviderSpy: SinonSpy<[Uint8Array | Uint16Array | Uint32Array]>;
     let randomGeneratorInstance: RandomGenerator;
     beforeEach(() => {
-        randomGeneratorInstance = new RandomGenerator();
+        entropyProvider = new EnvironmentDetectingEntropyProvider();
+        entropyProviderSpy = spy(entropyProvider, 'getRandomValues');
+        randomGeneratorInstance = new RandomGenerator(entropyProvider);
     });
 
     describe('bytes', () => {
         it('should return a byteCount-long Uint8Array (byteCount = 1)', async () => {
             const byteCount = 1;
             const random = await randomGeneratorInstance.bytes(byteCount);
+
+            const getRandomValuesResult = await entropyProviderSpy.firstCall.returnValue;
+
             expect(random.length).to.equal(byteCount);
             expect(random.byteLength).to.equal(byteCount);
+            expect(random).to.deep.equal(getRandomValuesResult);
         });
 
         it('should return a byteCount-long Uint8Array (byteCount = 32)', async () => {
             const byteCount = 32;
             const random = await randomGeneratorInstance.bytes(byteCount);
+
+            const getRandomValuesResult = await entropyProviderSpy.firstCall.returnValue;
+
             expect(random.length).to.equal(byteCount);
             expect(random.byteLength).to.equal(byteCount);
+            expect(random).to.deep.equal(getRandomValuesResult);
         });
 
         it('should return a byteCount-long Uint8Array (byteCount = 10000000)', async () => {
             const byteCount = 10000000;
             const random = await randomGeneratorInstance.bytes(byteCount);
+
+            const getRandomValuesResult = await entropyProviderSpy.firstCall.returnValue;
+
             expect(random.length).to.equal(byteCount);
             expect(random.byteLength).to.equal(byteCount);
+            expect(random).to.deep.equal(getRandomValuesResult);
         });
 
         it('should throw if byteCount = 0', async () => {
@@ -49,26 +68,247 @@ describe('RandomGenerator', () => {
     });
 
     describe('integer', () => {
-        it('should return an array of integers with one element between min and max (min = 0, max = 100)', async () => {
+        it('should return an array of integers with one element (min = 0, max = 100)', async () => {
             const min = 0;
             const max = 100;
             const [random] = await randomGeneratorInstance.integer(min, max);
+
+            const getRandomValuesResult = await entropyProviderSpy.lastCall.returnValue;
+
+            const alphabetLength = max - min + 1;
+            const randomNumber = getRandomValuesResult[0] % alphabetLength;
+
+            expect(random).to.equal(randomNumber);
             expect(random)
                 .to.be.at.least(min)
-                .and.at.most(max);
+                .and.to.be.at.most(max);
         });
 
-        it('should return an array of integers with 5 elements, all between min and max (min = 0, max = 100, howMany = 5)', async () => {
+        it('should return an array of integers with 5 elements (min = 0, max = 100, howMany = 5)', async () => {
             const min = 0;
             const max = 100;
             const howMany = 5;
             const random = await randomGeneratorInstance.integer(min, max, howMany);
-            expect(random.length).to.equal(howMany);
 
-            for (const r of random) {
-                expect(r)
+            const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint8Count = fetchedUint8ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
+            let cursor = 0;
+            for (const currentUint8Array of fetchedUint8ArrayArrays) {
+                fetchedRandomUint8Values.set(currentUint8Array, cursor);
+                cursor += currentUint8Array.length;
+            }
+
+            const alphabetLength = max - min + 1;
+            const remainder = 256 % alphabetLength;
+            const randomNumberIndexes = [];
+            for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
+                if (fetchedRandomUint8Values[i] >= remainder) {
+                    randomNumberIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                }
+            }
+            const randomNumbers = randomNumberIndexes.map(i => min + i);
+
+            expect(random).to.deep.equal(randomNumbers);
+            for (const randomNumber of random) {
+                expect(randomNumber)
                     .to.be.at.least(min)
-                    .and.at.most(max);
+                    .and.to.be.at.most(max);
+            }
+        });
+
+        it('should return an array of integers with 15 elements (min = 0, max = 500, howMany = 15)', async () => {
+            const min = 0;
+            const max = 500;
+            const howMany = 15;
+            const random = await randomGeneratorInstance.integer(min, max, howMany);
+
+            const fetchedUint16ArrayArrays: Uint16Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint16Count = fetchedUint16ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint16Values = new Uint16Array(fetchedRandomUint16Count);
+            let cursor = 0;
+            for (const currentRandom of fetchedUint16ArrayArrays) {
+                fetchedRandomUint16Values.set(currentRandom, cursor);
+                cursor += currentRandom.length;
+            }
+
+            const alphabetLength = max - min + 1;
+            const remainder = 65536 % alphabetLength;
+            const randomNumberIndexes = [];
+            for (let i = 0; i < fetchedRandomUint16Values.length; i++) {
+                if (fetchedRandomUint16Values[i] >= remainder) {
+                    randomNumberIndexes.push(fetchedRandomUint16Values[i] % alphabetLength);
+                }
+            }
+            const randomNumbers = randomNumberIndexes.map(i => min + i);
+
+            expect(random).to.deep.equal(randomNumbers);
+            for (const randomNumber of random) {
+                expect(randomNumber)
+                    .to.be.at.least(min)
+                    .and.to.be.at.most(max);
+            }
+        });
+
+        it('should return an array of integers with 25 elements (min = 0, max = 100000, howMany = 25)', async () => {
+            const min = 0;
+            const max = 100000;
+            const howMany = 25;
+            const random = await randomGeneratorInstance.integer(min, max, howMany);
+
+            const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint32Count = fetchedUint32ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
+            let cursor = 0;
+            for (const currentRandom of fetchedUint32ArrayArrays) {
+                fetchedRandomUint32Values.set(currentRandom, cursor);
+                cursor += currentRandom.length;
+            }
+
+            const alphabetLength = max - min + 1;
+            const remainder = 4294967296 % alphabetLength;
+            const randomNumberIndexes = [];
+            for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
+                if (fetchedRandomUint32Values[i] >= remainder) {
+                    randomNumberIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                }
+            }
+            const randomNumbers = randomNumberIndexes.map(i => min + i);
+
+            expect(random).to.deep.equal(randomNumbers);
+            for (const randomNumber of random) {
+                expect(randomNumber)
+                    .to.be.at.least(min)
+                    .and.to.be.at.most(max);
+            }
+        });
+
+        it('should return an array of integers with 2 elements (min = 0, max = 4294967295, howMany = 2)', async () => {
+            const min = 0;
+            const max = 4294967295;
+            const howMany = 2;
+            const random = await randomGeneratorInstance.integer(min, max, howMany);
+
+            const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint32Count = fetchedUint32ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
+            let cursor = 0;
+            for (const currentRandom of fetchedUint32ArrayArrays) {
+                fetchedRandomUint32Values.set(currentRandom, cursor);
+                cursor += currentRandom.length;
+            }
+
+            const alphabetLength = max - min + 1;
+            const remainder = 4294967296 % alphabetLength;
+            const randomNumberIndexes = [];
+            for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
+                if (fetchedRandomUint32Values[i] >= remainder) {
+                    randomNumberIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                }
+            }
+            const randomNumbers = randomNumberIndexes.map(i => min + i);
+
+            expect(random).to.deep.equal(randomNumbers);
+            for (const randomNumber of random) {
+                expect(randomNumber)
+                    .to.be.at.least(min)
+                    .and.to.be.at.most(max);
+            }
+        });
+
+        it('should return an array of integers with 10000 elements (min = 0, max = 4294967295, howMany = 10000)', async () => {
+            const min = 0;
+            const max = 4294967295;
+            const howMany = 10000;
+            const random = await randomGeneratorInstance.integer(min, max, howMany);
+
+            const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint32Count = fetchedUint32ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
+            let cursor = 0;
+            for (const currentRandom of fetchedUint32ArrayArrays) {
+                fetchedRandomUint32Values.set(currentRandom, cursor);
+                cursor += currentRandom.length;
+            }
+
+            const alphabetLength = max - min + 1;
+            const remainder = 4294967296 % alphabetLength;
+            const randomNumberIndexes = [];
+            for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
+                if (fetchedRandomUint32Values[i] >= remainder) {
+                    randomNumberIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                }
+            }
+            const randomNumbers = randomNumberIndexes.map(i => min + i);
+
+            expect(random).to.deep.equal(randomNumbers);
+            for (const randomNumber of random) {
+                expect(randomNumber)
+                    .to.be.at.least(min)
+                    .and.to.be.at.most(max);
+            }
+        });
+
+        it('should return an array of integers with 50000 elements (min = 0, max = 4294967295, howMany = 50000)', async () => {
+            const min = 0;
+            const max = 4294967295;
+            const howMany = 50000;
+            const random = await randomGeneratorInstance.integer(min, max, howMany);
+
+            const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint32Count = fetchedUint32ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
+            let cursor = 0;
+            for (const currentRandom of fetchedUint32ArrayArrays) {
+                fetchedRandomUint32Values.set(currentRandom, cursor);
+                cursor += currentRandom.length;
+            }
+
+            const alphabetLength = max - min + 1;
+            const remainder = 4294967296 % alphabetLength;
+            const randomNumberIndexes = [];
+            for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
+                if (fetchedRandomUint32Values[i] >= remainder) {
+                    randomNumberIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                }
+            }
+            const randomNumbers = randomNumberIndexes.map(i => min + i);
+
+            expect(random).to.deep.equal(randomNumbers);
+            for (const randomNumber of random) {
+                expect(randomNumber)
+                    .to.be.at.least(min)
+                    .and.to.be.at.most(max);
             }
         });
 
@@ -155,12 +395,141 @@ describe('RandomGenerator', () => {
     });
 
     describe('string', () => {
-        it('should return a string with 20 characters from the given alphabet', async () => {
+        it('should return a string with 20 characters from the given alphabet (alphabetLength = 3)', async () => {
             const desiredLength = 20;
             const alphabet = 'abc';
             const random = await randomGeneratorInstance.string(alphabet, desiredLength);
-            expect(random.length).to.equal(desiredLength);
 
+            const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint8Count = fetchedUint8ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
+            let cursor = 0;
+            for (const currentUint8Array of fetchedUint8ArrayArrays) {
+                fetchedRandomUint8Values.set(currentUint8Array, cursor);
+                cursor += currentUint8Array.length;
+            }
+
+            const alphabetLength = alphabet.length;
+            const remainder = 256 % alphabetLength;
+            const randomCharIndexes = [];
+            for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
+                if (fetchedRandomUint8Values[i] >= remainder) {
+                    randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                }
+            }
+            const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
+
+            expect(random).to.deep.equal(randomChars);
+            for (const c of random.split('')) {
+                expect(alphabet.includes(c)).to.be.true;
+            }
+        });
+
+        it('should return a string with 20 characters from the given alphabet (alphabetLength = 310)', async () => {
+            const desiredLength = 20;
+            const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.repeat(5);
+            const random = await randomGeneratorInstance.string(alphabet, desiredLength);
+
+            const fetchedUint16ArrayArrays: Uint16Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint16Count = fetchedUint16ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint16Values = new Uint16Array(fetchedRandomUint16Count);
+            let cursor = 0;
+            for (const currentUint16Array of fetchedUint16ArrayArrays) {
+                fetchedRandomUint16Values.set(currentUint16Array, cursor);
+                cursor += currentUint16Array.length;
+            }
+
+            const alphabetLength = alphabet.length;
+            const remainder = 65536 % alphabetLength;
+            const randomCharIndexes = [];
+            for (let i = 0; i < fetchedRandomUint16Values.length; i++) {
+                if (fetchedRandomUint16Values[i] >= remainder) {
+                    randomCharIndexes.push(fetchedRandomUint16Values[i] % alphabetLength);
+                }
+            }
+            const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
+
+            expect(random).to.deep.equal(randomChars);
+            for (const c of random.split('')) {
+                expect(alphabet.includes(c)).to.be.true;
+            }
+        });
+
+        it('should return a string with 20 characters from the given alphabet (alphabetLength = 65720)', async () => {
+            const desiredLength = 20;
+            const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.repeat(1060);
+            const random = await randomGeneratorInstance.string(alphabet, desiredLength);
+
+            const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint32Count = fetchedUint32ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
+            let cursor = 0;
+            for (const currentUint32Array of fetchedUint32ArrayArrays) {
+                fetchedRandomUint32Values.set(currentUint32Array, cursor);
+                cursor += currentUint32Array.length;
+            }
+
+            const alphabetLength = alphabet.length;
+            const remainder = 4294967296 % alphabetLength;
+            const randomCharIndexes = [];
+            for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
+                if (fetchedRandomUint32Values[i] >= remainder) {
+                    randomCharIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                }
+            }
+            const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
+
+            expect(random).to.deep.equal(randomChars);
+            for (const c of random.split('')) {
+                expect(alphabet.includes(c)).to.be.true;
+            }
+        });
+
+        it('should return a string with 100000 characters from the given alphabet (alphabetLength = 310000)', async () => {
+            const desiredLength = 100000;
+            const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.repeat(5000);
+            const random = await randomGeneratorInstance.string(alphabet, desiredLength);
+
+            const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint32Count = fetchedUint32ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
+            let cursor = 0;
+            for (const currentUint32Array of fetchedUint32ArrayArrays) {
+                fetchedRandomUint32Values.set(currentUint32Array, cursor);
+                cursor += currentUint32Array.length;
+            }
+
+            const alphabetLength = alphabet.length;
+            const remainder = 4294967296 % alphabetLength;
+            const randomCharIndexes = [];
+            for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
+                if (fetchedRandomUint32Values[i] >= remainder) {
+                    randomCharIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                }
+            }
+            const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
+
+            expect(random).to.deep.equal(randomChars);
             for (const c of random.split('')) {
                 expect(alphabet.includes(c)).to.be.true;
             }
@@ -176,7 +545,7 @@ describe('RandomGenerator', () => {
         });
 
         it('should throw if the alphabet has more than 4294967296 characters', async () => {
-            // Unable to construct a string with 4294967296 characters.
+            // Unable to construct a string with 4294967296 + 1 characters.
             const fakeString = {
                 length: 4294967296 + 1,
             };
@@ -211,6 +580,33 @@ describe('RandomGenerator', () => {
     describe('lowercase', () => {
         it('should return a string with 20 lowercase letters (desiredLength = 20)', async () => {
             const random = await randomGeneratorInstance.lowercase(20);
+            const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+            const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint8Count = fetchedUint8ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
+            let cursor = 0;
+            for (const currentUint8Array of fetchedUint8ArrayArrays) {
+                fetchedRandomUint8Values.set(currentUint8Array, cursor);
+                cursor += currentUint8Array.length;
+            }
+
+            const alphabetLength = alphabet.length;
+            const remainder = 256 % alphabetLength;
+            const randomCharIndexes = [];
+            for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
+                if (fetchedRandomUint8Values[i] >= remainder) {
+                    randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                }
+            }
+            const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
+
+            expect(random).to.deep.equal(randomChars);
             expect(/^[a-z]{20}$/.test(random)).to.be.true;
         });
 
@@ -236,6 +632,33 @@ describe('RandomGenerator', () => {
     describe('uppercase', () => {
         it('should return a string with 20 uppercase letters (desiredLength = 20)', async () => {
             const random = await randomGeneratorInstance.uppercase(20);
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+            const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint8Count = fetchedUint8ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
+            let cursor = 0;
+            for (const currentUint8Array of fetchedUint8ArrayArrays) {
+                fetchedRandomUint8Values.set(currentUint8Array, cursor);
+                cursor += currentUint8Array.length;
+            }
+
+            const alphabetLength = alphabet.length;
+            const remainder = 256 % alphabetLength;
+            const randomCharIndexes = [];
+            for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
+                if (fetchedRandomUint8Values[i] >= remainder) {
+                    randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                }
+            }
+            const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
+
+            expect(random).to.deep.equal(randomChars);
             expect(/^[A-Z]{20}$/.test(random)).to.be.true;
         });
 
@@ -261,6 +684,33 @@ describe('RandomGenerator', () => {
     describe('numeric', () => {
         it('should return a string with 20 numeric characters (desiredLength = 20)', async () => {
             const random = await randomGeneratorInstance.numeric(20);
+            const alphabet = '0123456789';
+
+            const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint8Count = fetchedUint8ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
+            let cursor = 0;
+            for (const currentUint8Array of fetchedUint8ArrayArrays) {
+                fetchedRandomUint8Values.set(currentUint8Array, cursor);
+                cursor += currentUint8Array.length;
+            }
+
+            const alphabetLength = alphabet.length;
+            const remainder = 256 % alphabetLength;
+            const randomCharIndexes = [];
+            for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
+                if (fetchedRandomUint8Values[i] >= remainder) {
+                    randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                }
+            }
+            const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
+
+            expect(random).to.deep.equal(randomChars);
             expect(/^[0-9]{20}$/.test(random)).to.be.true;
         });
 
@@ -286,6 +736,33 @@ describe('RandomGenerator', () => {
     describe('alphabetic', () => {
         it('should return a string with 20 alphabetic characters (desiredLength = 20)', async () => {
             const random = await randomGeneratorInstance.alphabetic(20);
+            const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+            const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint8Count = fetchedUint8ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
+            let cursor = 0;
+            for (const currentUint8Array of fetchedUint8ArrayArrays) {
+                fetchedRandomUint8Values.set(currentUint8Array, cursor);
+                cursor += currentUint8Array.length;
+            }
+
+            const alphabetLength = alphabet.length;
+            const remainder = 256 % alphabetLength;
+            const randomCharIndexes = [];
+            for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
+                if (fetchedRandomUint8Values[i] >= remainder) {
+                    randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                }
+            }
+            const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
+
+            expect(random).to.deep.equal(randomChars);
             expect(/^[a-zA-Z]{20}$/.test(random)).to.be.true;
         });
 
@@ -311,6 +788,33 @@ describe('RandomGenerator', () => {
     describe('alphanumeric', () => {
         it('should return a string with 20 alphanumeric characters (desiredLength = 20)', async () => {
             const random = await randomGeneratorInstance.alphanumeric(20);
+            const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+            const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
+                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+            );
+
+            const fetchedRandomUint8Count = fetchedUint8ArrayArrays
+                .map(a => a.length)
+                .reduce((acc, curr) => (acc += curr));
+            const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
+            let cursor = 0;
+            for (const currentUint8Array of fetchedUint8ArrayArrays) {
+                fetchedRandomUint8Values.set(currentUint8Array, cursor);
+                cursor += currentUint8Array.length;
+            }
+
+            const alphabetLength = alphabet.length;
+            const remainder = 256 % alphabetLength;
+            const randomCharIndexes = [];
+            for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
+                if (fetchedRandomUint8Values[i] >= remainder) {
+                    randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                }
+            }
+            const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
+
+            expect(random).to.deep.equal(randomChars);
             expect(/^[a-zA-Z0-9]{20}$/.test(random)).to.be.true;
         });
 
@@ -336,6 +840,14 @@ describe('RandomGenerator', () => {
     describe('boolean', () => {
         it('should return a boolean', async () => {
             const random = await randomGeneratorInstance.boolean();
+
+            const getRandomValuesResult = await entropyProviderSpy.lastCall.returnValue;
+
+            const alphabetLength = 2; // 0 or 1 (false or true)
+            const randomNumber = getRandomValuesResult[0] % alphabetLength;
+            const randomBoolean = randomNumber === 1;
+
+            expect(random).to.equal(randomBoolean);
             expect(random === true || random === false).to.be.true;
         });
     });
