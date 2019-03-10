@@ -109,11 +109,9 @@ export class RandomGenerator {
             const random = await this.getRandomArrayForAlphabet(alphabetLength, remainingCount);
             for (let i = 0; i < random.length; i++) {
                 // discrete uniform distribution does not include values smaller than the remainder
-                if (random[i] < remainder) {
-                    continue;
+                if (random[i] >= remainder) {
+                    charIndexes.push(random[i] % alphabetLength);
                 }
-
-                charIndexes.push(random[i] % alphabetLength);
             }
         }
 
