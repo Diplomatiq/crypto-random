@@ -1,9 +1,10 @@
+.github/
 src/
 test/
-.github/
+.DS_Store
 .editorconfig
 .prettierignore
 .prettierrc
+.travis.yml
 tsconfig.json
 tsconfig.test.json
-.DS_Store
