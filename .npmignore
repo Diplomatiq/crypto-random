@@ -1,6 +1,9 @@
 src/
 test/
+.github/
 .editorconfig
 .prettierignore
 .prettierrc
 tsconfig.json
+tsconfig.test.json
+.DS_Store
