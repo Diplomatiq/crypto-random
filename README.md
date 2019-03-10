@@ -1,6 +1,34 @@
 # crypto-random
 
-![https://travis-ci.org/Diplomatiq/crypto-random](https://img.shields.io/travis/Diplomatiq/crypto-random.svg) ![https://github.com/Diplomatiq/crypto-random](https://img.shields.io/github/languages/top/Diplomatiq/crypto-random.svg) ![https://github.com/Diplomatiq/crypto-random](https://img.shields.io/github/languages/code-size/Diplomatiq/crypto-random.svg) ![https://www.npmjs.com/package/@diplomatiq/crypto-random](https://img.shields.io/bundlephobia/min/@diplomatiq/crypto-random.svg) ![https://www.npmjs.com/package/@diplomatiq/crypto-random](https://img.shields.io/npm/dt/@diplomatiq/crypto-random.svg) ![https://www.npmjs.com/package/@diplomatiq/crypto-random](https://img.shields.io/npm/v/@diplomatiq/crypto-random.svg) ![https://github.com/Diplomatiq/crypto-random/blob/master/LICENSE](https://img.shields.io/npm/l/@diplomatiq/crypto-random.svg)
+<p>
+<a href="https://travis-ci.org/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://img.shields.io/travis/Diplomatiq/crypto-random.svg" alt="build status">
+</a>
+
+<a href="https://github.com/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://img.shields.io/github/languages/top/Diplomatiq/crypto-random.svg" alt="languages used">
+</a>
+
+<a href="https://github.com/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://img.shields.io/github/languages/code-size/Diplomatiq/crypto-random.svg" alt="code size">
+</a>
+
+<a href="https://www.npmjs.com/package/@diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://img.shields.io/bundlephobia/min/@diplomatiq/crypto-random.svg" alt="minified size">
+</a>
+
+<a href="https://www.npmjs.com/package/@diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://img.shields.io/npm/dt/@diplomatiq/crypto-random.svg" alt="downloads from npm">
+</a>
+
+<a href="https://www.npmjs.com/package/@diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://img.shields.io/npm/v/@diplomatiq/crypto-random.svg" alt="latest released version on npm">
+</a>
+
+<a href="https://github.com/Diplomatiq/crypto-random/blob/master/LICENSE" target="_blank" style="text-decoration: none;">
+	<img src="https://img.shields.io/npm/l/@diplomatiq/crypto-random.svg" alt="license">
+</a>
+</p>
 
 TypeScript/JavaScript library for generating cryptographically strong random integers from custom intervals, boolean values, strings with uniformly distributed random characters from custom character sets.
 
