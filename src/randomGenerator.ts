@@ -28,14 +28,17 @@ export class RandomGenerator {
         desiredRandomLength: number,
     ): Promise<Uint8Array | Uint16Array | Uint32Array> {
         if (alphabetLength <= 0) {
+            /* istanbul ignore next */
             throw new Error('alphabetLength must be greater than 0');
         }
 
         if (alphabetLength > RandomGenerator.MAX_ALPHABET_LEN) {
+            /* istanbul ignore next */
             throw new Error(`alphabetLength must be less than or equal to ${RandomGenerator.MAX_ALPHABET_LEN}`);
         }
 
         if (desiredRandomLength <= 0) {
+            /* istanbul ignore next */
             throw new Error('desiredRandomLength must be greater than 0');
         }
 
@@ -49,6 +52,7 @@ export class RandomGenerator {
                 typedArray = new Uint32Array(desiredRandomLength);
             }
         } catch (e) {
+            /* istanbul ignore next */
             throw new Error('TypedArray allocation failed, requested random too big');
         }
 
@@ -63,10 +67,12 @@ export class RandomGenerator {
      */
     private async getRemainderForAlphabet(alphabetLength: number): Promise<number> {
         if (alphabetLength <= 0) {
+            /* istanbul ignore next */
             throw new Error('alphabetLength must be greater than 0');
         }
 
         if (alphabetLength > RandomGenerator.MAX_ALPHABET_LEN) {
+            /* istanbul ignore next */
             throw new Error(`alphabetLength must be less than or equal to ${RandomGenerator.MAX_ALPHABET_LEN}`);
         }
 
@@ -90,14 +96,17 @@ export class RandomGenerator {
         howMany: number,
     ): Promise<number[]> {
         if (alphabetLength <= 0) {
+            /* istanbul ignore next */
             throw new Error('alphabetLength must be greater than 0');
         }
 
         if (alphabetLength > RandomGenerator.MAX_ALPHABET_LEN) {
+            /* istanbul ignore next */
             throw new Error(`alphabetLength must be less than or equal to ${RandomGenerator.MAX_ALPHABET_LEN}`);
         }
 
         if (howMany <= 0) {
+            /* istanbul ignore next */
             throw new Error('howMany must be greater than 0');
         }
 
@@ -129,6 +138,7 @@ export class RandomGenerator {
         try {
             return await this.entropyProvider.getRandomValues(new Uint8Array(byteCount));
         } catch (e) {
+            /* istanbul ignore next */
             throw new Error('TypedArray allocation failed, requested random too big');
         }
     }

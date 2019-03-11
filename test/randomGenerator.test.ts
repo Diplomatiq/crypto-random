@@ -6,11 +6,12 @@ import { EntropyProvider } from '../src/entropyProvider';
 
 describe('RandomGenerator', () => {
     let entropyProvider: EntropyProvider;
-    let entropyProviderSpy: SinonSpy<[Uint8Array | Uint16Array | Uint32Array]>;
+    let getRandomValuesSpy: SinonSpy<[Uint8Array | Uint16Array | Uint32Array]>;
     let randomGeneratorInstance: RandomGenerator;
+
     beforeEach(() => {
         entropyProvider = new EnvironmentDetectingEntropyProvider();
-        entropyProviderSpy = spy(entropyProvider, 'getRandomValues');
+        getRandomValuesSpy = spy(entropyProvider, 'getRandomValues');
         randomGeneratorInstance = new RandomGenerator(entropyProvider);
     });
 
@@ -19,7 +20,7 @@ describe('RandomGenerator', () => {
             const byteCount = 1;
             const random = await randomGeneratorInstance.bytes(byteCount);
 
-            const getRandomValuesResult = await entropyProviderSpy.firstCall.returnValue;
+            const getRandomValuesResult = await getRandomValuesSpy.firstCall.returnValue;
 
             expect(random.length).to.equal(byteCount);
             expect(random.byteLength).to.equal(byteCount);
@@ -30,7 +31,7 @@ describe('RandomGenerator', () => {
             const byteCount = 32;
             const random = await randomGeneratorInstance.bytes(byteCount);
 
-            const getRandomValuesResult = await entropyProviderSpy.firstCall.returnValue;
+            const getRandomValuesResult = await getRandomValuesSpy.firstCall.returnValue;
 
             expect(random.length).to.equal(byteCount);
             expect(random.byteLength).to.equal(byteCount);
@@ -41,7 +42,7 @@ describe('RandomGenerator', () => {
             const byteCount = 10000000;
             const random = await randomGeneratorInstance.bytes(byteCount);
 
-            const getRandomValuesResult = await entropyProviderSpy.firstCall.returnValue;
+            const getRandomValuesResult = await getRandomValuesSpy.firstCall.returnValue;
 
             expect(random.length).to.equal(byteCount);
             expect(random.byteLength).to.equal(byteCount);
@@ -73,7 +74,7 @@ describe('RandomGenerator', () => {
             const max = 100;
             const [random] = await randomGeneratorInstance.integer(min, max);
 
-            const getRandomValuesResult = await entropyProviderSpy.lastCall.returnValue;
+            const getRandomValuesResult = await getRandomValuesSpy.lastCall.returnValue;
 
             const alphabetLength = max - min + 1;
             const randomNumber = getRandomValuesResult[0] % alphabetLength;
@@ -91,7 +92,7 @@ describe('RandomGenerator', () => {
             const random = await randomGeneratorInstance.integer(min, max, howMany);
 
             const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint8Count = fetchedUint8ArrayArrays
@@ -129,7 +130,7 @@ describe('RandomGenerator', () => {
             const random = await randomGeneratorInstance.integer(min, max, howMany);
 
             const fetchedUint16ArrayArrays: Uint16Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint16Count = fetchedUint16ArrayArrays
@@ -167,7 +168,7 @@ describe('RandomGenerator', () => {
             const random = await randomGeneratorInstance.integer(min, max, howMany);
 
             const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint32Count = fetchedUint32ArrayArrays
@@ -205,7 +206,7 @@ describe('RandomGenerator', () => {
             const random = await randomGeneratorInstance.integer(min, max, howMany);
 
             const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint32Count = fetchedUint32ArrayArrays
@@ -243,7 +244,7 @@ describe('RandomGenerator', () => {
             const random = await randomGeneratorInstance.integer(min, max, howMany);
 
             const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint32Count = fetchedUint32ArrayArrays
@@ -281,7 +282,7 @@ describe('RandomGenerator', () => {
             const random = await randomGeneratorInstance.integer(min, max, howMany);
 
             const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint32Count = fetchedUint32ArrayArrays
@@ -401,7 +402,7 @@ describe('RandomGenerator', () => {
             const random = await randomGeneratorInstance.string(alphabet, desiredLength);
 
             const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint8Count = fetchedUint8ArrayArrays
@@ -436,7 +437,7 @@ describe('RandomGenerator', () => {
             const random = await randomGeneratorInstance.string(alphabet, desiredLength);
 
             const fetchedUint16ArrayArrays: Uint16Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint16Count = fetchedUint16ArrayArrays
@@ -471,7 +472,7 @@ describe('RandomGenerator', () => {
             const random = await randomGeneratorInstance.string(alphabet, desiredLength);
 
             const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint32Count = fetchedUint32ArrayArrays
@@ -506,7 +507,7 @@ describe('RandomGenerator', () => {
             const random = await randomGeneratorInstance.string(alphabet, desiredLength);
 
             const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint32Count = fetchedUint32ArrayArrays
@@ -583,7 +584,7 @@ describe('RandomGenerator', () => {
             const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
             const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint8Count = fetchedUint8ArrayArrays
@@ -635,7 +636,7 @@ describe('RandomGenerator', () => {
             const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
             const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint8Count = fetchedUint8ArrayArrays
@@ -687,7 +688,7 @@ describe('RandomGenerator', () => {
             const alphabet = '0123456789';
 
             const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint8Count = fetchedUint8ArrayArrays
@@ -739,7 +740,7 @@ describe('RandomGenerator', () => {
             const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
             const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint8Count = fetchedUint8ArrayArrays
@@ -791,7 +792,7 @@ describe('RandomGenerator', () => {
             const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
             const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                entropyProviderSpy.getCalls().map(async c => await c.returnValue),
+                getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
             );
 
             const fetchedRandomUint8Count = fetchedUint8ArrayArrays
@@ -841,7 +842,7 @@ describe('RandomGenerator', () => {
         it('should return a boolean', async () => {
             const random = await randomGeneratorInstance.boolean();
 
-            const getRandomValuesResult = await entropyProviderSpy.lastCall.returnValue;
+            const getRandomValuesResult = await getRandomValuesSpy.lastCall.returnValue;
 
             const alphabetLength = 2; // 0 or 1 (false or true)
             const randomNumber = getRandomValuesResult[0] % alphabetLength;
@@ -849,6 +850,14 @@ describe('RandomGenerator', () => {
 
             expect(random).to.equal(randomBoolean);
             expect(random === true || random === false).to.be.true;
+        });
+    });
+
+    describe('instantiated without constructor parameter', () => {
+        it('should still work', async () => {
+            const randomGeneratorInstance = new RandomGenerator();
+            const randomBoolean = await randomGeneratorInstance.boolean();
+            expect(randomBoolean === true || randomBoolean === false).to.be.true;
         });
     });
 });

@@ -9,6 +9,10 @@
 	<img src="https://img.shields.io/github/languages/top/Diplomatiq/crypto-random.svg" alt="languages used">
 </a>
 
+<a href="https://codecov.io/gh/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://img.shields.io/codecov/c/github/Diplomatiq/crypto-random.svg" alt="code coverage">
+</a>
+
 <a href="https://github.com/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
 	<img src="https://img.shields.io/github/languages/code-size/Diplomatiq/crypto-random.svg" alt="code size">
 </a>
@@ -54,7 +58,7 @@ Unit tests do not test the randomness of the output. Please inspect the implemen
 
 ## Usage
 
-*Note: This package is built as an ES6 package. You will not be able to use `require()`.*
+_Note: This package is built as an ES6 package. You will not be able to use `require()`._
 
 After installation, import the `RandomGenerator` class into your project, and use its async API after instantiation:
 
@@ -175,7 +179,7 @@ In a web browser environment, `window.crypto.getRandomValues`, in a Node.js envi
 
 ### Using a custom entropy source
 
-**WARNING!** Unless you are a seasoned cryptography expert possessing comprehensive knowledge about random/pseudo-random value generation, **DO NOT use any custom entropy source implementation other than the default**, or found in well-tested, popular libraries survived many years under public scrutiny. Cryptography — and mostly random generation — can be messed up very easily. If you use  anything else than a CSPRNG/TRNG for gathering entropy, the values you generate using that entropy source will not be random in the cryptographic meaning, and thus will NOT be suitable for being used as passwords/keys/nonces/etc.
+**WARNING!** Unless you are a seasoned cryptography expert possessing comprehensive knowledge about random/pseudo-random value generation, **DO NOT use any custom entropy source implementation other than the default**, or found in well-tested, popular libraries survived many years under public scrutiny. Cryptography — and mostly random generation — can be messed up very easily. If you use anything else than a CSPRNG/TRNG for gathering entropy, the values you generate using that entropy source will not be random in the cryptographic meaning, and thus will NOT be suitable for being used as passwords/keys/nonces/etc.
 
 Providing no arguments in the constructor, the `RandomGenerator` is instantiated using the default `EnvironmentDetectingEntropyProvider` as its entropy source. This detects if the code is run in a web browser or in a Node.js process, and uses the available cryptography API on the given platform as its underlying random source. (As stated above: in a web browser, `window.crypto.getRandomValues`, in Node.js, `crypto.randomFill` is used.)
 
@@ -193,11 +197,11 @@ class RandomGenerator {
 	 * Provides entropy in the form of random-filled typed arrays.
 	 */
 	private readonly entropyProvider: EntropyProvider;
-	
+
 	constructor(entropyProvider: EntropyProvider = new EnvironmentDetectingEntropyProvider()) {
 	    this.entropyProvider = entropyProvider;
 	}
-	
+
 	// …
 }
 ```
