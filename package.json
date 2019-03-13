@@ -1,7 +1,7 @@
 {
   "name": "@diplomatiq/crypto-random",
   "version": "0.6.0",
-  "description": "Generate cryptographically strong random integers from custom intervals, boolean values, strings with uniformly distributed random characters from custom character sets.",
+  "description": "Generate cryptographically strong, uniformly distributed random integers from custom intervals, strings from custom character sets, and boolean values.",
   "main": "dist/main.js",
   "module": "dist/main.js",
   "types": "dist/main.d.ts",
