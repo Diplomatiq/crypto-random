@@ -49,7 +49,6 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
      */
     private async getRandomValuesBrowser<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
         if (this.environment !== 'browser') {
-            /* istanbul ignore next */
             throw new Error('not in browser environment');
         }
 
@@ -80,13 +79,11 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
      */
     private async getRandomValuesNode<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
         if (this.environment !== 'node') {
-            /* istanbul ignore next */
             throw new Error('not in node environment');
         }
 
         return new Promise<T>((resolve, reject) => {
             this.nodeCrypto.randomFill(array, (error: Error | null, array: T) => {
-                /* istanbul ignore if */
                 if (error) {
                     reject(error);
                     return;
@@ -107,12 +104,5 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
             case 'node':
                 return await this.getRandomValuesNode(array);
         }
-    }
-
-    /**
-     * Returns the current @member environment the code is running in.
-     */
-    public getEnvironment(): 'browser' | 'node' {
-        return this.environment;
     }
 }

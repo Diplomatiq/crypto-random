@@ -24,21 +24,24 @@ describe('EnvironmentDetectingEntropyProvider', () => {
         });
 
         it('should detect browser environment if global.window is defined', () => {
-            expect(entropyProvider.getEnvironment()).to.equal('browser');
+            // @ts-ignore
+            expect(entropyProvider.environment).to.equal('browser');
         });
 
         it('should work', async () => {
             const array = new Uint8Array(10);
+            expect(array.every(v => v === 0)).to.be.true;
             const sameArray = await entropyProvider.getRandomValues(array);
             expect(array).to.deep.equal(sameArray);
-            expect(array.some(v => v > 0)).to.be.true;
+            expect(array.some(v => v !== 0)).to.be.true;
         });
 
         it('should work for arrays larger than 65536 bytes', async () => {
             const array = new Uint8Array(100000);
+            expect(array.every(v => v === 0)).to.be.true;
             const sameArray = await entropyProvider.getRandomValues(array);
             expect(array).to.deep.equal(sameArray);
-            expect(array.some(v => v > 0)).to.be.true;
+            expect(array.some(v => v !== 0)).to.be.true;
         });
 
         it('should throw if window.crypto is not available', () => {
@@ -64,6 +67,16 @@ describe('EnvironmentDetectingEntropyProvider', () => {
                 expect(e.message).to.equal('window.crypto.getRandomValues not available');
             }
         });
+
+        it('should throw if calling the node method', async () => {
+            try {
+                // @ts-ignore
+                await entropyProvider.getRandomValuesNode(new Uint8Array());
+                expect.fail('did not throw');
+            } catch (e) {
+                expect(e.message).to.equal('not in node environment');
+            }
+        });
     });
 
     describe('in Node.js environment', () => {
@@ -72,17 +85,19 @@ describe('EnvironmentDetectingEntropyProvider', () => {
         });
 
         it('should detect node environment if global.window is not, but global.process is defined', () => {
-            expect(entropyProvider.getEnvironment()).to.equal('node');
+            // @ts-ignore
+            expect(entropyProvider.environment).to.equal('node');
         });
 
         it('should work', async () => {
             const array = new Uint8Array(10);
+            expect(array.every(v => v === 0)).to.be.true;
             const sameArray = await entropyProvider.getRandomValues(array);
             expect(array).to.deep.equal(sameArray);
-            expect(array.some(v => v > 0)).to.be.true;
+            expect(array.some(v => v !== 0)).to.be.true;
         });
 
-        it('should throw if the randomFill errs', async () => {
+        it('should throw if randomFill throws sync error', async () => {
             try {
                 // @ts-ignore
                 await entropyProvider.getRandomValues(5);
@@ -92,9 +107,41 @@ describe('EnvironmentDetectingEntropyProvider', () => {
             }
         });
 
+        it('should throw if randomFill throws async error', async () => {
+            const simulatedErrorMessage = 'SimulatedError';
+
+            const Module = require('module');
+            const originalRequire = Module.prototype.require;
+            Module.prototype.require = (requiredModuleName: string) => {
+                if (requiredModuleName === 'crypto') {
+                    return {
+                        randomFill: <T extends Uint8Array | Uint16Array | Uint32Array>(
+                            array: T,
+                            callback: (error: Error, array: T) => void,
+                        ) => {
+                            callback(new Error(simulatedErrorMessage), array);
+                        },
+                    };
+                }
+
+                return originalRequire(requiredModuleName);
+            };
+
+            try {
+                const entropyProviderWithOverriddenNodeRequire = new EnvironmentDetectingEntropyProvider();
+                await entropyProviderWithOverriddenNodeRequire.getRandomValues(new Uint8Array());
+                expect.fail('did not throw');
+            } catch (e) {
+                expect(e.message).to.equal(simulatedErrorMessage);
+            }
+
+            Module.prototype.require = originalRequire;
+        });
+
         it('should throw if NodeJS.crypto is not available', () => {
-            const originalRequire = require('module').prototype.require;
-            require('module').prototype.require = (requiredModuleName: string) => {
+            const Module = require('module');
+            const originalRequire = Module.prototype.require;
+            Module.prototype.require = (requiredModuleName: string) => {
                 if (requiredModuleName === 'crypto') {
                     throw new Error();
                 }
@@ -107,26 +154,42 @@ describe('EnvironmentDetectingEntropyProvider', () => {
                 expect(e.message).to.equal('NodeJS.crypto not available');
             }
 
-            originalRequire('module').prototype.require = originalRequire;
+            Module.prototype.require = originalRequire;
+        });
+
+        it('should throw if calling the browser method', async () => {
+            try {
+                // @ts-ignore
+                await entropyProvider.getRandomValuesBrowser();
+                expect.fail('did not throw');
+            } catch (e) {
+                expect(e.message).to.equal('not in browser environment');
+            }
         });
     });
 
     describe('in unexpected environment', () => {
-        it('should throw', () => {
-            const process = global.process;
+        let process: NodeJS.Process;
+
+        before(() => {
+            process = global.process;
             // @ts-ignore
             global.window = undefined;
             // @ts-ignore
             global.process = undefined;
+        });
 
+        after(() => {
+            global.process = process;
+        });
+
+        it('should throw', () => {
             try {
                 new EnvironmentDetectingEntropyProvider();
                 expect.fail('did not throw');
             } catch (e) {
                 expect(e.message).to.equal('Unexpected environment: neither browser nor node');
             }
-
-            global.process = process;
         });
     });
 });
