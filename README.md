@@ -34,7 +34,7 @@
 </a>
 </p>
 
-TypeScript/JavaScript library for generating cryptographically strong random integers from custom intervals, boolean values, strings with uniformly distributed random characters from custom character sets.
+TypeScript/JavaScript library for generating cryptographically strong, uniformly distributed random integers from custom intervals, strings from custom character sets, and boolean values.
 
 ---
 
