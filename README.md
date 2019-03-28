@@ -126,7 +126,7 @@ string(alphabet: string, desiredLength: number): Promise<string>;
 lowercase(desiredLength: number): Promise<string>;
 ```
 
-### uppercase(desiredLength: number): Promise<string>;
+### uppercase(desiredLength: number): Promise\<string>;
 
 ```
 /**
@@ -135,7 +135,7 @@ lowercase(desiredLength: number): Promise<string>;
 uppercase(desiredLength: number): Promise<string>;
 ```
 
-### numeric(desiredLength: number): Promise<string>;
+### numeric(desiredLength: number): Promise\<string>;
 
 ```
 /**
@@ -144,7 +144,7 @@ uppercase(desiredLength: number): Promise<string>;
 numeric(desiredLength: number): Promise<string>;
 ```
 
-### alphabetic(desiredLength: number): Promise<string>;
+### alphabetic(desiredLength: number): Promise\<string>;
 
 ```
 /**
@@ -153,7 +153,7 @@ numeric(desiredLength: number): Promise<string>;
 alphabetic(desiredLength: number): Promise<string>;
 ```
 
-### alphanumeric(desiredLength: number): Promise<string>;
+### alphanumeric(desiredLength: number): Promise\<string>;
 
 ```
 /**
@@ -162,7 +162,7 @@ alphabetic(desiredLength: number): Promise<string>;
 alphanumeric(desiredLength: number): Promise<string>;
 ```
 
-### boolean(): Promise<boolean>;
+### boolean(): Promise\<boolean>;
 
 ```
 /**
