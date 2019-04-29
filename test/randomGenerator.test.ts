@@ -404,6 +404,14 @@ describe('RandomGenerator', () => {
                     expect(e.message).to.equal('max - min + 1 must be less than or equal to 4294967296');
                 }
             });
+
+            it('should throw if unique = true && howMany > alphabetLength', async () => {
+                try {
+                    await randomGeneratorInstance.integer(0, 1, 3, true);
+                } catch (e) {
+                    expect(e.message).to.equal('if unique = true, howMany must be less than or equal to max - min + 1');
+                }
+            });
         });
 
         describe('string', () => {
@@ -585,6 +593,16 @@ describe('RandomGenerator', () => {
                     expect.fail('did not throw');
                 } catch (e) {
                     expect(e.message).to.equal('desiredLength must be greater than 0');
+                }
+            });
+
+            it('should throw if unique = true && desiredLength > alphabet.length', async () => {
+                try {
+                    await randomGeneratorInstance.string('abc', 4, true);
+                } catch (e) {
+                    expect(e.message).to.equal(
+                        "if unique = true, desiredLength must be less than or equal to the alphabet's length",
+                    );
                 }
             });
         });

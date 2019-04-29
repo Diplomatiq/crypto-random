@@ -1,6 +1,7 @@
+import { Alphabets } from './alphabets';
+import { ConfigurableUniquenessStore } from './configurableUniquenessStore';
 import { EntropyProvider } from './entropyProvider';
 import { EnvironmentDetectingEntropyProvider } from './environmentDetectingEntropyProvider';
-import { Alphabets } from './alphabets';
 
 export class RandomGenerator {
     /**
@@ -16,6 +17,150 @@ export class RandomGenerator {
 
     constructor(entropyProvider: EntropyProvider = new EnvironmentDetectingEntropyProvider()) {
         this.entropyProvider = entropyProvider;
+    }
+
+    /**
+     * Returns an array of @param byteCount length filled with cryptographically strong random bytes.
+     */
+    public async bytes(byteCount: number): Promise<Uint8Array> {
+        if (byteCount <= 0) {
+            throw new Error('byteCount must be greater than 0');
+        }
+
+        try {
+            return await this.entropyProvider.getRandomValues(new Uint8Array(byteCount));
+        } catch (e) {
+            throw new Error('TypedArray allocation failed, requested random too big');
+        }
+    }
+
+    /**
+     * Returns a cryptographically strong randomly generated positive integer between @param min and @param max,
+     * inclusive.
+     * The lowest possible value of @param min is 0.
+     * The highest possible value of @param max is @var Number.MAX_SAFE_INTEGER.
+     * The @param max - @param min + 1 <= @member MAX_ALPHABET_LEN inequality must be kept true.
+     *
+     * If needing more than one integer at once from a given interval, use @param howMany. This will reduce the number
+     * of times calling the crypto API, making the execution faster.
+     *
+     * If generating more than one integers with @param unique = true,
+     * the generated integers will be unique in the returned set.
+     */
+    public async integer(min: number, max: number, howMany = 1, unique = false): Promise<number[]> {
+        if (min < 0) {
+            throw new Error('min must be greater than or equal to 0');
+        }
+
+        if (min > Number.MAX_SAFE_INTEGER) {
+            throw new Error(`min must be less than or equal to ${Number.MAX_SAFE_INTEGER}`);
+        }
+
+        if (max < 0) {
+            throw new Error('max must be greater than or equal to 0');
+        }
+
+        if (max > Number.MAX_SAFE_INTEGER) {
+            throw new Error(`max must be less than or equal to ${Number.MAX_SAFE_INTEGER}`);
+        }
+
+        if (howMany <= 0) {
+            throw new Error('howMany must be greater than 0');
+        }
+
+        if (max <= min) {
+            throw new Error('max must be greater than min');
+        }
+
+        const alphabetLength = max - min + 1;
+        if (alphabetLength > RandomGenerator.MAX_ALPHABET_LEN) {
+            throw new Error(`max - min + 1 must be less than or equal to ${RandomGenerator.MAX_ALPHABET_LEN}`);
+        }
+
+        if (unique && howMany > alphabetLength) {
+            throw new Error('if unique = true, howMany must be less than or equal to max - min + 1');
+        }
+
+        const numberIndexes = await this.getUniformlyDistributedRandomCharIndexesOfAlphabet(
+            alphabetLength,
+            howMany,
+            unique,
+        );
+        return numberIndexes.map(i => min + i);
+    }
+
+    /**
+     * Returns a cryptographically strong randomly generated string value with a @param desiredLength length
+     * from a given @param alphabet.
+     *
+     * If generating with @param unique = true, the characters in the string will be unique.
+     */
+    public async string(alphabet: string, desiredLength: number, unique = false): Promise<string> {
+        if (alphabet.length === 0) {
+            throw new Error('alphabet must not be empty');
+        }
+
+        if (alphabet.length > RandomGenerator.MAX_ALPHABET_LEN) {
+            throw new Error(`alphabet must have maximum ${RandomGenerator.MAX_ALPHABET_LEN} characters`);
+        }
+
+        if (desiredLength <= 0) {
+            throw new Error('desiredLength must be greater than 0');
+        }
+
+        if (unique && desiredLength > alphabet.length) {
+            throw new Error("if unique = true, desiredLength must be less than or equal to the alphabet's length");
+        }
+
+        const charIndexes = await this.getUniformlyDistributedRandomCharIndexesOfAlphabet(
+            alphabet.length,
+            desiredLength,
+            unique,
+        );
+        return charIndexes.map(i => alphabet.charAt(i)).join('');
+    }
+
+    /**
+     * Returns a cryptographically strong randomly generated string with lowercase letters only.
+     */
+    public async lowercase(desiredLength: number, unique = false): Promise<string> {
+        return await this.string(Alphabets.LOWERCASE, desiredLength, unique);
+    }
+
+    /**
+     * Returns a cryptographically strong randomly generated string with uppercase letters only.
+     */
+    public async uppercase(desiredLength: number, unique = false): Promise<string> {
+        return await this.string(Alphabets.UPPERCASE, desiredLength, unique);
+    }
+
+    /**
+     * Returns a cryptographically strong randomly generated string with numeric characters only.
+     */
+    public async numeric(desiredLength: number, unique = false): Promise<string> {
+        return await this.string(Alphabets.NUMERIC, desiredLength, unique);
+    }
+
+    /**
+     * Returns a cryptographically strong randomly generated string with lower- and uppercase letters only.
+     */
+    public async alphabetic(desiredLength: number, unique = false): Promise<string> {
+        return await this.string(Alphabets.ALPHABETIC, desiredLength, unique);
+    }
+
+    /**
+     * Returns a cryptographically strong randomly generated alphanumeric string.
+     */
+    public async alphanumeric(desiredLength: number, unique = false): Promise<string> {
+        return await this.string(Alphabets.ALPHANUMERIC, desiredLength, unique);
+    }
+
+    /**
+     * Returns a cryptographically strong randomly generated boolean value.
+     */
+    public async boolean(): Promise<boolean> {
+        const [numericBoolean] = await this.integer(0, 1);
+        return numericBoolean === 1;
     }
 
     /**
@@ -88,6 +233,7 @@ export class RandomGenerator {
     private async getUniformlyDistributedRandomCharIndexesOfAlphabet(
         alphabetLength: number,
         howMany: number,
+        unique: boolean,
     ): Promise<number[]> {
         if (alphabetLength <= 0) {
             throw new Error('alphabetLength must be greater than 0');
@@ -102,145 +248,19 @@ export class RandomGenerator {
         }
 
         const remainder = await this.getRemainderForAlphabet(alphabetLength);
-        const charIndexes: number[] = [];
+        const charIndexes = new ConfigurableUniquenessStore<number>(unique);
 
-        while (charIndexes.length < howMany) {
-            const remainingCount = howMany - charIndexes.length;
+        while (charIndexes.size() < howMany) {
+            const remainingCount = howMany - charIndexes.size();
             const random = await this.getRandomArrayForAlphabet(alphabetLength, remainingCount);
             for (let i = 0; i < random.length; i++) {
                 // discrete uniform distribution does not include values smaller than the remainder
                 if (random[i] >= remainder) {
-                    charIndexes.push(random[i] % alphabetLength);
+                    charIndexes.add(random[i] % alphabetLength);
                 }
             }
         }
 
-        return charIndexes;
-    }
-
-    /**
-     * Returns an array of @param byteCount length filled with cryptographically strong random bytes.
-     */
-    public async bytes(byteCount: number): Promise<Uint8Array> {
-        if (byteCount <= 0) {
-            throw new Error('byteCount must be greater than 0');
-        }
-
-        try {
-            return await this.entropyProvider.getRandomValues(new Uint8Array(byteCount));
-        } catch (e) {
-            throw new Error('TypedArray allocation failed, requested random too big');
-        }
-    }
-
-    /**
-     * Returns a cryptographically strong randomly generated positive integer between @param min and @param max,
-     * inclusive.
-     * The lowest possible value of @param min is 0.
-     * The highest possible value of @param max is @var Number.MAX_SAFE_INTEGER.
-     * The @param max - @param min + 1 <= @member MAX_ALPHABET_LEN inequality must be kept true.
-     *
-     * If needing more than one integer at once from a given interval, use @param howMany. This will reduce the number
-     * of times calling the crypto API, making the execution faster.
-     */
-    public async integer(min: number, max: number, howMany: number = 1): Promise<number[]> {
-        if (min < 0) {
-            throw new Error('min must be greater than or equal to 0');
-        }
-
-        if (min > Number.MAX_SAFE_INTEGER) {
-            throw new Error(`min must be less than or equal to ${Number.MAX_SAFE_INTEGER}`);
-        }
-
-        if (max < 0) {
-            throw new Error('max must be greater than or equal to 0');
-        }
-
-        if (max > Number.MAX_SAFE_INTEGER) {
-            throw new Error(`max must be less than or equal to ${Number.MAX_SAFE_INTEGER}`);
-        }
-
-        if (howMany <= 0) {
-            throw new Error('howMany must be greater than 0');
-        }
-
-        if (max <= min) {
-            throw new Error('max must be greater than min');
-        }
-
-        const alphabetLength = max - min + 1;
-        if (alphabetLength > RandomGenerator.MAX_ALPHABET_LEN) {
-            throw new Error(`max - min + 1 must be less than or equal to ${RandomGenerator.MAX_ALPHABET_LEN}`);
-        }
-
-        const numberIndexes = await this.getUniformlyDistributedRandomCharIndexesOfAlphabet(alphabetLength, howMany);
-        return numberIndexes.map(i => min + i);
-    }
-
-    /**
-     * Returns a cryptographically strong randomly generated string value with a @param desiredLength length
-     * from a given @param alphabet.
-     */
-    public async string(alphabet: string, desiredLength: number): Promise<string> {
-        if (alphabet.length === 0) {
-            throw new Error('alphabet must not be empty');
-        }
-
-        if (alphabet.length > RandomGenerator.MAX_ALPHABET_LEN) {
-            throw new Error(`alphabet must have maximum ${RandomGenerator.MAX_ALPHABET_LEN} characters`);
-        }
-
-        if (desiredLength <= 0) {
-            throw new Error('desiredLength must be greater than 0');
-        }
-
-        const charIndexes = await this.getUniformlyDistributedRandomCharIndexesOfAlphabet(
-            alphabet.length,
-            desiredLength,
-        );
-        return charIndexes.map(i => alphabet.charAt(i)).join('');
-    }
-
-    /**
-     * Returns a cryptographically strong randomly generated string with lowercase letters only.
-     */
-    public async lowercase(desiredLength: number): Promise<string> {
-        return await this.string(Alphabets.LOWERCASE, desiredLength);
-    }
-
-    /**
-     * Returns a cryptographically strong randomly generated string with uppercase letters only.
-     */
-    public async uppercase(desiredLength: number): Promise<string> {
-        return await this.string(Alphabets.UPPERCASE, desiredLength);
-    }
-
-    /**
-     * Returns a cryptographically strong randomly generated string with numeric characters only.
-     */
-    public async numeric(desiredLength: number): Promise<string> {
-        return await this.string(Alphabets.NUMERIC, desiredLength);
-    }
-
-    /**
-     * Returns a cryptographically strong randomly generated string with lower- and uppercase letters only.
-     */
-    public async alphabetic(desiredLength: number): Promise<string> {
-        return await this.string(Alphabets.ALPHABETIC, desiredLength);
-    }
-
-    /**
-     * Returns a cryptographically strong randomly generated alphanumeric string.
-     */
-    public async alphanumeric(desiredLength: number): Promise<string> {
-        return await this.string(Alphabets.ALPHANUMERIC, desiredLength);
-    }
-
-    /**
-     * Returns a cryptographically strong randomly generated boolean value.
-     */
-    public async boolean(): Promise<boolean> {
-        const [numericBoolean] = await this.integer(0, 1);
-        return numericBoolean === 1;
+        return charIndexes.all();
     }
 }

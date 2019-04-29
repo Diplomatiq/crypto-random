@@ -91,7 +91,7 @@ The below referenced `MAX_ALPHABET_LEN` value determines the maximum number of e
 bytes(byteCount: number): Promise<Uint8Array>;
 ```
 
-### integer(min: number, max: number, howMany: number = 1): Promise\<number[]>;
+### integer(min: number, max: number, howMany = 1, unique = false): Promise\<number[]>;
 
 ```
 /**
@@ -103,63 +103,68 @@ bytes(byteCount: number): Promise<Uint8Array>;
  *
  * If needing more than one integer at once from a given interval, use @param howMany. This will reduce the number
  * of times calling the crypto API, making the execution faster.
+ *
+ * If generating more than one integers with @param unique = true,
+ * the generated integers will be unique in the returned set.
  */
-integer(min: number, max: number, howMany: number = 1): Promise<number[]>;
+public async integer(min: number, max: number, howMany = 1, unique = false): Promise<number[]>;
 ```
 
-### string(alphabet: string, desiredLength: number): Promise\<string>;
+### string(alphabet: string, desiredLength: number, unique = false): Promise\<string>;
 
 ```
 /**
  * Returns a cryptographically strong randomly generated string value with a @param desiredLength length
  * from a given @param alphabet.
+ *
+ * If generating with @param unique = true, the characters in the string will be unique.
  */
-string(alphabet: string, desiredLength: number): Promise<string>;
+public async string(alphabet: string, desiredLength: number, unique = false): Promise<string>;
 ```
 
-### lowercase(desiredLength: number): Promise\<string>;
+### lowercase(desiredLength: number, unique = false): Promise\<string>;
 
 ```
 /**
  * Returns a cryptographically strong randomly generated string with lowercase letters only.
  */
-lowercase(desiredLength: number): Promise<string>;
+lowercase(desiredLength: number, unique = false): Promise<string>;
 ```
 
-### uppercase(desiredLength: number): Promise\<string>;
+### uppercase(desiredLength: number, unique = false): Promise\<string>;
 
 ```
 /**
  * Returns a cryptographically strong randomly generated string with uppercase letters only.
  */
-uppercase(desiredLength: number): Promise<string>;
+uppercase(desiredLength: number, unique = false): Promise<string>;
 ```
 
-### numeric(desiredLength: number): Promise\<string>;
+### numeric(desiredLength: number, unique = false): Promise\<string>;
 
 ```
 /**
  * Returns a cryptographically strong randomly generated string with numeric characters only.
  */
-numeric(desiredLength: number): Promise<string>;
+numeric(desiredLength: number, unique = false): Promise<string>;
 ```
 
-### alphabetic(desiredLength: number): Promise\<string>;
+### alphabetic(desiredLength: number, unique = false): Promise\<string>;
 
 ```
 /**
  * Returns a cryptographically strong randomly generated string with lower- and uppercase letters only.
  */
-alphabetic(desiredLength: number): Promise<string>;
+alphabetic(desiredLength: number, unique = false): Promise<string>;
 ```
 
-### alphanumeric(desiredLength: number): Promise\<string>;
+### alphanumeric(desiredLength: number, unique = false): Promise\<string>;
 
 ```
 /**
  * Returns a cryptographically strong randomly generated alphanumeric string.
  */
-alphanumeric(desiredLength: number): Promise<string>;
+alphanumeric(desiredLength: number, unique = false): Promise<string>;
 ```
 
 ### boolean(): Promise\<boolean>;
