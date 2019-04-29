@@ -42,6 +42,18 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
     }
 
     /**
+     * Puts random values into the given @param array, and returns the array.
+     */
+    public async getRandomValues<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
+        switch (this.environment) {
+            case 'browser':
+                return await this.getRandomValuesBrowser(array);
+            case 'node':
+                return await this.getRandomValuesNode(array);
+        }
+    }
+
+    /**
      * Puts random values into the given @param array in a browser environment, and returns the array.
      * If the array's length is greater than the general @member BROWSER_ENTROPY_QUOTA_BYTES,
      * it is divided into chunks, and filled chunk-by-chunk.
@@ -92,17 +104,5 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
                 resolve(array);
             });
         });
-    }
-
-    /**
-     * Puts random values into the given @param array, and returns the array.
-     */
-    public async getRandomValues<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
-        switch (this.environment) {
-            case 'browser':
-                return await this.getRandomValuesBrowser(array);
-            case 'node':
-                return await this.getRandomValuesNode(array);
-        }
     }
 }
