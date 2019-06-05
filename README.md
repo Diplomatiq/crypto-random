@@ -219,4 +219,4 @@ This library generates its random values complying with the discrete uniform dis
 
 ---
 
-Copyright (c) 2019 Diplomatiq
+Copyright (c) 2018 Diplomatiq
