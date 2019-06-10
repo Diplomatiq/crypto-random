@@ -1,6 +1,20 @@
+dist: trusty
+
 language: node_js
+
 node_js:
-    - 'node'
-    - 'lts/*'
+  - node
+  - lts/*
+
+addons:
+  sonarcloud:
+    organization: diplomatiq
+
+install: npm ci
+
+script:
+  - sonar-scanner
+  - npm test
+
 after_success:
-    - npm run coverage
+  - npm run codecov
