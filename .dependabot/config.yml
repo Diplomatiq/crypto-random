@@ -1,0 +1,12 @@
+version: 1
+update_configs:
+  - package_manager: "javascript"
+    directory: "/"
+    update_schedule: "live"
+    default_reviewers:
+    - "luczsoma"
+    default_assignees:
+    - "luczsoma"
+    default_labels:
+    - "dependencies"
+    - "dependabot"
