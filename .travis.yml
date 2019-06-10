@@ -13,8 +13,5 @@ addons:
 install: npm ci
 
 script:
-  - sonar-scanner
   - npm test
-
-after_success:
-  - npm run codecov
+  - sonar-scanner

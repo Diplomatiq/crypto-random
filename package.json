@@ -11,10 +11,9 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -r ./dist/",
-    "codecov": "nyc report --reporter=lcov && codecov",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",
-    "test": "cross-env-shell TS_NODE_PROJECT=tsconfig.test.json nyc mocha --require ts-node/register --require source-map-support/register --recursive test/**/*.test.ts"
+    "test": "cross-env-shell TS_NODE_PROJECT=tsconfig.test.json nyc --reporter=lcov --reporter=text mocha --require ts-node/register --require source-map-support/register --recursive test/**/*.test.ts"
   },
   "repository": {
     "type": "git",
@@ -43,7 +42,6 @@
     "@types/node": "^12.0.7",
     "@types/sinon": "^7.0.12",
     "chai": "^4.2.0",
-    "codecov": "^3.5.0",
     "cross-env": "^5.2.0",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",

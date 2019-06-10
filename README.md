@@ -9,10 +9,6 @@
 	<img src="https://img.shields.io/github/languages/top/Diplomatiq/crypto-random.svg" alt="languages used">
 </a>
 
-<a href="https://codecov.io/gh/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://img.shields.io/codecov/c/github/Diplomatiq/crypto-random.svg" alt="code coverage">
-</a>
-
 <a href="https://github.com/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
 	<img src="https://img.shields.io/github/languages/code-size/Diplomatiq/crypto-random.svg" alt="code size">
 </a>
