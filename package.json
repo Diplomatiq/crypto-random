@@ -11,7 +11,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -r ./dist/",
-    "coverage": "nyc report --reporter=lcov && codecov",
+    "codecov": "nyc report --reporter=lcov && codecov",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",
     "test": "cross-env-shell TS_NODE_PROJECT=tsconfig.test.json nyc mocha --require ts-node/register --require source-map-support/register --recursive test/**/*.test.ts"
