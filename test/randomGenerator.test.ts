@@ -1,12 +1,13 @@
 import { expect } from 'chai';
-import { EnvironmentDetectingEntropyProvider } from '../src/environmentDetectingEntropyProvider';
-import { spy, SinonSpy } from 'sinon';
-import { RandomGenerator } from '../src/randomGenerator';
+import { SinonSpy, spy } from 'sinon';
 import { EntropyProvider } from '../src/entropyProvider';
+import { EnvironmentDetectingEntropyProvider } from '../src/environmentDetectingEntropyProvider';
+import { RandomGenerator } from '../src/randomGenerator';
+import { UnsignedTypedArray } from '../src/unsignedTypedArray';
 
 describe('RandomGenerator', () => {
     let entropyProvider: EntropyProvider;
-    let getRandomValuesSpy: SinonSpy<[Uint8Array | Uint16Array | Uint32Array]>;
+    let getRandomValuesSpy: SinonSpy<[UnsignedTypedArray]>;
     let randomGeneratorInstance: RandomGenerator;
 
     beforeEach(() => {
@@ -338,7 +339,7 @@ describe('RandomGenerator', () => {
                     await randomGeneratorInstance.integer(Number.MAX_SAFE_INTEGER + 1, Number.MAX_SAFE_INTEGER + 2);
                     expect.fail('did not throw');
                 } catch (e) {
-                    expect(e.message).to.equal(`min must be less than or equal to ${Number.MAX_SAFE_INTEGER}`);
+                    expect(e.message).to.equal('min must be less than or equal to Number.MAX_SAFE_INTEGER');
                 }
             });
 
@@ -356,7 +357,7 @@ describe('RandomGenerator', () => {
                     await randomGeneratorInstance.integer(0, Number.MAX_SAFE_INTEGER + 1);
                     expect.fail('did not throw');
                 } catch (e) {
-                    expect(e.message).to.equal(`max must be less than or equal to ${Number.MAX_SAFE_INTEGER}`);
+                    expect(e.message).to.equal('max must be less than or equal to Number.MAX_SAFE_INTEGER');
                 }
             });
 
@@ -401,7 +402,9 @@ describe('RandomGenerator', () => {
                     await randomGeneratorInstance.integer(0, 4294967296);
                     expect.fail('did not throw');
                 } catch (e) {
-                    expect(e.message).to.equal('max - min + 1 must be less than or equal to 4294967296');
+                    expect(e.message).to.equal(
+                        'max - min + 1 must be less than or equal to RandomGenerator.MAX_ALPHABET_LEN',
+                    );
                 }
             });
 
@@ -574,7 +577,9 @@ describe('RandomGenerator', () => {
                     await randomGeneratorInstance.string((fakeString as any) as string, 1);
                     expect.fail('did not throw');
                 } catch (e) {
-                    expect(e.message).to.equal('alphabet must have maximum 4294967296 characters');
+                    expect(e.message).to.equal(
+                        'alphabet must have maximum RandomGenerator.MAX_ALPHABET_LEN characters',
+                    );
                 }
             });
 
@@ -919,7 +924,9 @@ describe('RandomGenerator', () => {
                     await randomGeneratorInstance.getRandomArrayForAlphabet(4294967296 + 1, 1);
                     expect.fail('did not throw');
                 } catch (e) {
-                    expect(e.message).to.equal('alphabetLength must be less than or equal to 4294967296');
+                    expect(e.message).to.equal(
+                        'alphabetLength must be less than or equal to RandomGenerator.MAX_ALPHABET_LEN',
+                    );
                 }
             });
 
@@ -981,7 +988,9 @@ describe('RandomGenerator', () => {
                     await randomGeneratorInstance.getRemainderForAlphabet(4294967296 + 1);
                     expect.fail('did not throw');
                 } catch (e) {
-                    expect(e.message).to.equal('alphabetLength must be less than or equal to 4294967296');
+                    expect(e.message).to.equal(
+                        'alphabetLength must be less than or equal to RandomGenerator.MAX_ALPHABET_LEN',
+                    );
                 }
             });
         });
@@ -1013,7 +1022,9 @@ describe('RandomGenerator', () => {
                     await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(4294967296 + 1, 1);
                     expect.fail('did not throw');
                 } catch (e) {
-                    expect(e.message).to.equal('alphabetLength must be less than or equal to 4294967296');
+                    expect(e.message).to.equal(
+                        'alphabetLength must be less than or equal to RandomGenerator.MAX_ALPHABET_LEN',
+                    );
                 }
             });
             it('should throw if howMany = 0', async () => {

@@ -9,10 +9,6 @@
 	<img src="https://img.shields.io/github/languages/top/Diplomatiq/crypto-random.svg" alt="languages used">
 </a>
 
-<a href="https://codecov.io/gh/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://img.shields.io/codecov/c/github/Diplomatiq/crypto-random.svg" alt="code coverage">
-</a>
-
 <a href="https://github.com/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
 	<img src="https://img.shields.io/github/languages/code-size/Diplomatiq/crypto-random.svg" alt="code size">
 </a>
@@ -191,8 +187,10 @@ Providing no arguments in the constructor, the `RandomGenerator` is instantiated
 As long as it implements the `EntropyProvider` interface specified below, you can use any kind of entropy source by providing it to the constructor at instantiating the `RandomGenerator`.
 
 ```
+type UnsignedTypedArray = Uint8Array | Uint16Array | Uint32Array;
+
 interface EntropyProvider {
-    getRandomValues<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T>;
+    getRandomValues<T extends UnsignedTypedArray>(array: T): Promise<T>;
 }
 ```
 

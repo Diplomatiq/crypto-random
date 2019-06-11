@@ -1,15 +1,18 @@
 import { EntropyProvider } from './entropyProvider';
+import { UnsignedTypedArray } from './unsignedTypedArray';
 
 export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
     /**
      * The crypto implementation used in the browser. The window.crypto object is used.
      */
-    private readonly browserCrypto: Crypto | undefined;
+    private readonly browserCrypto?: Crypto;
 
     /**
      * The crypto implementation used in Node.js environments. This will be provided by the "crypto" module of Node.
      */
-    private readonly nodeCrypto: any;
+    private readonly nodeCrypto?: {
+        randomFill: <T extends UnsignedTypedArray>(buffer: T, callback: (err: Error | null, buf: T) => void) => void;
+    };
 
     /**
      * According to the Web Crypto standard, there is a 2 ** 16 bytes quota for requesting entropy.
@@ -44,13 +47,15 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
     /**
      * Puts random values into the given @param array, and returns the array.
      */
-    public async getRandomValues<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
+    public async getRandomValues<T extends UnsignedTypedArray>(array: T): Promise<T> {
         switch (this.environment) {
             case 'browser':
-                return await this.getRandomValuesBrowser(array);
+                return this.getRandomValuesBrowser(array);
             case 'node':
-                return await this.getRandomValuesNode(array);
+                return this.getRandomValuesNode(array);
         }
+
+        throw new Error('AssertError: unexpected environment in getRandomValues');
     }
 
     /**
@@ -59,13 +64,17 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
      * it is divided into chunks, and filled chunk-by-chunk.
      * Can be only called, if @member environment is 'browser'.
      */
-    private async getRandomValuesBrowser<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
+    private async getRandomValuesBrowser<T extends UnsignedTypedArray>(array: T): Promise<T> {
         if (this.environment !== 'browser') {
-            throw new Error('not in browser environment');
+            throw new Error('AssertError: not in browser environment');
+        }
+
+        if (this.browserCrypto === undefined) {
+            throw new Error('AssertError: no browserCrypto in browser environment');
         }
 
         if (array.byteLength <= EnvironmentDetectingEntropyProvider.BROWSER_ENTROPY_QUOTA_BYTES) {
-            return this.browserCrypto!.getRandomValues(array);
+            return this.browserCrypto.getRandomValues(array);
         }
 
         let remainingBytes = array.byteLength;
@@ -78,7 +87,7 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
             const chunkLength = availableEntropyBytes / array.BYTES_PER_ELEMENT;
             const chunkEnd = chunkStart + chunkLength;
             const chunkToFill = array.subarray(chunkStart, chunkEnd);
-            this.browserCrypto!.getRandomValues(chunkToFill);
+            this.browserCrypto.getRandomValues(chunkToFill);
             remainingBytes -= availableEntropyBytes;
         }
 
@@ -89,12 +98,16 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
      * Puts random values into the given @param array in a Node.js environment, and returns the array.
      * Can be only called, if @member environment is 'node'.
      */
-    private async getRandomValuesNode<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T> {
+    private async getRandomValuesNode<T extends UnsignedTypedArray>(array: T): Promise<T> {
         if (this.environment !== 'node') {
             throw new Error('not in node environment');
         }
 
         return new Promise<T>((resolve, reject) => {
+            if (this.nodeCrypto === undefined) {
+                throw new Error('AssertError: no nodeCrypto in node environment');
+            }
+
             this.nodeCrypto.randomFill(array, (error: Error | null, array: T) => {
                 if (error) {
                     reject(error);
