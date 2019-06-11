@@ -187,8 +187,10 @@ Providing no arguments in the constructor, the `RandomGenerator` is instantiated
 As long as it implements the `EntropyProvider` interface specified below, you can use any kind of entropy source by providing it to the constructor at instantiating the `RandomGenerator`.
 
 ```
+type UnsignedTypedArray = Uint8Array | Uint16Array | Uint32Array;
+
 interface EntropyProvider {
-    getRandomValues<T extends Uint8Array | Uint16Array | Uint32Array>(array: T): Promise<T>;
+    getRandomValues<T extends UnsignedTypedArray>(array: T): Promise<T>;
 }
 ```
 
