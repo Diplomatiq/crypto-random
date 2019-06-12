@@ -2,6 +2,8 @@ import { Alphabets } from './alphabets';
 import { ConfigurableUniquenessStore } from './configurableUniquenessStore';
 import { EntropyProvider } from './entropyProvider';
 import { EnvironmentDetectingEntropyProvider } from './environmentDetectingEntropyProvider';
+import { RandomGeneratorErrorCodes } from './randomGeneratorErrorCodes';
+import { UnsignedTypedArray } from './unsignedTypedArray';
 
 export class RandomGenerator {
     /**
@@ -24,13 +26,13 @@ export class RandomGenerator {
      */
     public async bytes(byteCount: number): Promise<Uint8Array> {
         if (byteCount <= 0) {
-            throw new Error('byteCount must be greater than 0');
+            throw new Error(RandomGeneratorErrorCodes.BYTE_COUNT_GT_ZERO);
         }
 
         try {
-            return await this.entropyProvider.getRandomValues(new Uint8Array(byteCount));
+            return this.entropyProvider.getRandomValues(new Uint8Array(byteCount));
         } catch (e) {
-            throw new Error('TypedArray allocation failed, requested random too big');
+            throw new Error(RandomGeneratorErrorCodes.TYPED_ARRAY_ALLOCATION_FAILED);
         }
     }
 
@@ -49,36 +51,36 @@ export class RandomGenerator {
      */
     public async integer(min: number, max: number, howMany = 1, unique = false): Promise<number[]> {
         if (min < 0) {
-            throw new Error('min must be greater than or equal to 0');
+            throw new Error(RandomGeneratorErrorCodes.MIN_GTE_ZERO);
         }
 
         if (min > Number.MAX_SAFE_INTEGER) {
-            throw new Error(`min must be less than or equal to ${Number.MAX_SAFE_INTEGER}`);
+            throw new Error(RandomGeneratorErrorCodes.MIN_LTE_MAX_SAFE_INTEGER);
         }
 
         if (max < 0) {
-            throw new Error('max must be greater than or equal to 0');
+            throw new Error(RandomGeneratorErrorCodes.MAX_GTE_ZERO);
         }
 
         if (max > Number.MAX_SAFE_INTEGER) {
-            throw new Error(`max must be less than or equal to ${Number.MAX_SAFE_INTEGER}`);
+            throw new Error(RandomGeneratorErrorCodes.MAX_LTE_MAX_SAFE_INTEGER);
         }
 
         if (howMany <= 0) {
-            throw new Error('howMany must be greater than 0');
+            throw new Error(RandomGeneratorErrorCodes.HOW_MANY_GT_ZERO);
         }
 
         if (max <= min) {
-            throw new Error('max must be greater than min');
+            throw new Error(RandomGeneratorErrorCodes.MAX_GT_MIN);
         }
 
         const alphabetLength = max - min + 1;
         if (alphabetLength > RandomGenerator.MAX_ALPHABET_LEN) {
-            throw new Error(`max - min + 1 must be less than or equal to ${RandomGenerator.MAX_ALPHABET_LEN}`);
+            throw new Error(RandomGeneratorErrorCodes.MAX_MINUS_MIN_PLUS_1_LTE_MAX_ALPHABET_LENGTH);
         }
 
         if (unique && howMany > alphabetLength) {
-            throw new Error('if unique = true, howMany must be less than or equal to max - min + 1');
+            throw new Error(RandomGeneratorErrorCodes.IF_UNIQUE_TRUE_THEN_HOW_MANY_LTE_ALPHABET_LENGTH);
         }
 
         const numberIndexes = await this.getUniformlyDistributedRandomCharIndexesOfAlphabet(
@@ -97,19 +99,19 @@ export class RandomGenerator {
      */
     public async string(alphabet: string, desiredLength: number, unique = false): Promise<string> {
         if (alphabet.length === 0) {
-            throw new Error('alphabet must not be empty');
+            throw new Error(RandomGeneratorErrorCodes.ALPHABET_NOT_EMPTY);
         }
 
         if (alphabet.length > RandomGenerator.MAX_ALPHABET_LEN) {
-            throw new Error(`alphabet must have maximum ${RandomGenerator.MAX_ALPHABET_LEN} characters`);
+            throw new Error(RandomGeneratorErrorCodes.ALPHABET_MAX_MAX_ALPHABET_LEN_CHARACTERS);
         }
 
         if (desiredLength <= 0) {
-            throw new Error('desiredLength must be greater than 0');
+            throw new Error(RandomGeneratorErrorCodes.DESIRED_LENGTH_GT_ZERO);
         }
 
         if (unique && desiredLength > alphabet.length) {
-            throw new Error("if unique = true, desiredLength must be less than or equal to the alphabet's length");
+            throw new Error(RandomGeneratorErrorCodes.IF_UNIQUE_TRUE_THEN_DESIRED_LENGTH_LTE_ALPHABET_LENGTH);
         }
 
         const charIndexes = await this.getUniformlyDistributedRandomCharIndexesOfAlphabet(
@@ -124,35 +126,35 @@ export class RandomGenerator {
      * Returns a cryptographically strong randomly generated string with lowercase letters only.
      */
     public async lowercase(desiredLength: number, unique = false): Promise<string> {
-        return await this.string(Alphabets.LOWERCASE, desiredLength, unique);
+        return this.string(Alphabets.LOWERCASE, desiredLength, unique);
     }
 
     /**
      * Returns a cryptographically strong randomly generated string with uppercase letters only.
      */
     public async uppercase(desiredLength: number, unique = false): Promise<string> {
-        return await this.string(Alphabets.UPPERCASE, desiredLength, unique);
+        return this.string(Alphabets.UPPERCASE, desiredLength, unique);
     }
 
     /**
      * Returns a cryptographically strong randomly generated string with numeric characters only.
      */
     public async numeric(desiredLength: number, unique = false): Promise<string> {
-        return await this.string(Alphabets.NUMERIC, desiredLength, unique);
+        return this.string(Alphabets.NUMERIC, desiredLength, unique);
     }
 
     /**
      * Returns a cryptographically strong randomly generated string with lower- and uppercase letters only.
      */
     public async alphabetic(desiredLength: number, unique = false): Promise<string> {
-        return await this.string(Alphabets.ALPHABETIC, desiredLength, unique);
+        return this.string(Alphabets.ALPHABETIC, desiredLength, unique);
     }
 
     /**
      * Returns a cryptographically strong randomly generated alphanumeric string.
      */
     public async alphanumeric(desiredLength: number, unique = false): Promise<string> {
-        return await this.string(Alphabets.ALPHANUMERIC, desiredLength, unique);
+        return this.string(Alphabets.ALPHANUMERIC, desiredLength, unique);
     }
 
     /**
@@ -171,20 +173,20 @@ export class RandomGenerator {
     private async getRandomArrayForAlphabet(
         alphabetLength: number,
         desiredRandomLength: number,
-    ): Promise<Uint8Array | Uint16Array | Uint32Array> {
+    ): Promise<UnsignedTypedArray> {
         if (alphabetLength <= 0) {
-            throw new Error('alphabetLength must be greater than 0');
+            throw new Error(RandomGeneratorErrorCodes.ALPHABET_LENGTH_GT_ZERO);
         }
 
         if (alphabetLength > RandomGenerator.MAX_ALPHABET_LEN) {
-            throw new Error(`alphabetLength must be less than or equal to ${RandomGenerator.MAX_ALPHABET_LEN}`);
+            throw new Error(RandomGeneratorErrorCodes.ALPHABET_LENGTH_LTE_MAX_ALPHABET_LENGTH);
         }
 
         if (desiredRandomLength <= 0) {
-            throw new Error('desiredRandomLength must be greater than 0');
+            throw new Error(RandomGeneratorErrorCodes.DESIRED_RANDOM_LENGTH_GT_ZERO);
         }
 
-        let typedArray: Uint8Array | Uint16Array | Uint32Array;
+        let typedArray: UnsignedTypedArray;
         try {
             if (alphabetLength <= 0x100) {
                 typedArray = new Uint8Array(desiredRandomLength);
@@ -194,10 +196,10 @@ export class RandomGenerator {
                 typedArray = new Uint32Array(desiredRandomLength);
             }
         } catch (e) {
-            throw new Error('TypedArray allocation failed, requested random too big');
+            throw new Error(RandomGeneratorErrorCodes.TYPED_ARRAY_ALLOCATION_FAILED);
         }
 
-        return await this.entropyProvider.getRandomValues(typedArray);
+        return this.entropyProvider.getRandomValues(typedArray);
     }
 
     /**
@@ -208,11 +210,11 @@ export class RandomGenerator {
      */
     private async getRemainderForAlphabet(alphabetLength: number): Promise<number> {
         if (alphabetLength <= 0) {
-            throw new Error('alphabetLength must be greater than 0');
+            throw new Error(RandomGeneratorErrorCodes.ALPHABET_LENGTH_GT_ZERO);
         }
 
         if (alphabetLength > RandomGenerator.MAX_ALPHABET_LEN) {
-            throw new Error(`alphabetLength must be less than or equal to ${RandomGenerator.MAX_ALPHABET_LEN}`);
+            throw new Error(RandomGeneratorErrorCodes.ALPHABET_LENGTH_LTE_MAX_ALPHABET_LENGTH);
         }
 
         if (alphabetLength <= 0x100) {
@@ -236,15 +238,15 @@ export class RandomGenerator {
         unique: boolean,
     ): Promise<number[]> {
         if (alphabetLength <= 0) {
-            throw new Error('alphabetLength must be greater than 0');
+            throw new Error(RandomGeneratorErrorCodes.ALPHABET_LENGTH_GT_ZERO);
         }
 
         if (alphabetLength > RandomGenerator.MAX_ALPHABET_LEN) {
-            throw new Error(`alphabetLength must be less than or equal to ${RandomGenerator.MAX_ALPHABET_LEN}`);
+            throw new Error(RandomGeneratorErrorCodes.ALPHABET_LENGTH_LTE_MAX_ALPHABET_LENGTH);
         }
 
         if (howMany <= 0) {
-            throw new Error('howMany must be greater than 0');
+            throw new Error(RandomGeneratorErrorCodes.HOW_MANY_GT_ZERO);
         }
 
         const remainder = await this.getRemainderForAlphabet(alphabetLength);
@@ -253,10 +255,10 @@ export class RandomGenerator {
         while (charIndexes.size() < howMany) {
             const remainingCount = howMany - charIndexes.size();
             const random = await this.getRandomArrayForAlphabet(alphabetLength, remainingCount);
-            for (let i = 0; i < random.length; i++) {
+            for (const randomNumber of random) {
                 // discrete uniform distribution does not include values smaller than the remainder
-                if (random[i] >= remainder) {
-                    charIndexes.add(random[i] % alphabetLength);
+                if (randomNumber >= remainder) {
+                    charIndexes.add(randomNumber % alphabetLength);
                 }
             }
         }

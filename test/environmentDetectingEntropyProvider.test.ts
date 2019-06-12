@@ -1,26 +1,32 @@
 import { expect } from 'chai';
+import { randomFillSync } from 'crypto';
 import { beforeEach } from 'mocha';
 import { EnvironmentDetectingEntropyProvider } from '../src/environmentDetectingEntropyProvider';
-import { randomFillSync } from 'crypto';
+import { UnsignedTypedArray } from '../src/unsignedTypedArray';
 
 describe('EnvironmentDetectingEntropyProvider', () => {
     let entropyProvider: EnvironmentDetectingEntropyProvider;
 
     describe('in browser environment', () => {
-        beforeEach(() => {
+        const windowMock = () => ({
+            document: {},
+            crypto: {
+                getRandomValues: (array: Uint8Array) => randomFillSync(array),
+            },
+        });
+
+        before(() => {
             // @ts-ignore
-            global.window = {
-                document: {},
-                crypto: {
-                    getRandomValues: (array: Uint8Array) => randomFillSync(array),
-                },
-            };
-            entropyProvider = new EnvironmentDetectingEntropyProvider();
+            global.window = windowMock();
         });
 
         after(() => {
             // @ts-ignore
             global.window = undefined;
+        });
+
+        beforeEach(() => {
+            entropyProvider = new EnvironmentDetectingEntropyProvider();
         });
 
         it('should detect browser environment if global.window is defined', () => {
@@ -46,7 +52,7 @@ describe('EnvironmentDetectingEntropyProvider', () => {
 
         it('should throw if window.crypto is not available', () => {
             // @ts-ignore
-            global.window.crypto = undefined;
+            window.crypto = undefined;
 
             try {
                 new EnvironmentDetectingEntropyProvider();
@@ -54,6 +60,9 @@ describe('EnvironmentDetectingEntropyProvider', () => {
             } catch (e) {
                 expect(e.message).to.equal('window.crypto.getRandomValues not available');
             }
+
+            // @ts-ignore
+            global.window = windowMock();
         });
 
         it('should throw if window.crypto.getRandomValues is not available', () => {
@@ -66,6 +75,9 @@ describe('EnvironmentDetectingEntropyProvider', () => {
             } catch (e) {
                 expect(e.message).to.equal('window.crypto.getRandomValues not available');
             }
+
+            // @ts-ignore
+            global.window = windowMock();
         });
 
         it('should throw if calling the node method', async () => {
@@ -115,7 +127,7 @@ describe('EnvironmentDetectingEntropyProvider', () => {
             Module.prototype.require = (requiredModuleName: string) => {
                 if (requiredModuleName === 'crypto') {
                     return {
-                        randomFill: <T extends Uint8Array | Uint16Array | Uint32Array>(
+                        randomFill: <T extends UnsignedTypedArray>(
                             array: T,
                             callback: (error: Error, array: T) => void,
                         ) => {
@@ -163,7 +175,7 @@ describe('EnvironmentDetectingEntropyProvider', () => {
                 await entropyProvider.getRandomValuesBrowser();
                 expect.fail('did not throw');
             } catch (e) {
-                expect(e.message).to.equal('not in browser environment');
+                expect(e.message).to.equal('AssertError: not in browser environment');
             }
         });
     });
@@ -190,6 +202,58 @@ describe('EnvironmentDetectingEntropyProvider', () => {
             } catch (e) {
                 expect(e.message).to.equal('Unexpected environment: neither browser nor node');
             }
+        });
+    });
+
+    describe('code coverage supplementary tests', () => {
+        let entropyProvider: EnvironmentDetectingEntropyProvider;
+
+        beforeEach(() => {
+            entropyProvider = new EnvironmentDetectingEntropyProvider();
+        });
+
+        describe('getRandomVaules', () => {
+            it('should throw in an unexpected environment', async () => {
+                // @ts-ignore
+                entropyProvider.environment = 'Definitely Unexpected Environment';
+
+                try {
+                    await entropyProvider.getRandomValues(new Uint8Array(1));
+                } catch (e) {
+                    expect(e.message).to.equal('AssertError: unexpected environment in getRandomValues');
+                }
+            });
+        });
+
+        describe('getRandomValuesBrowser', () => {
+            it('should throw if browserCrypto is undefined', async () => {
+                // @ts-ignore
+                entropyProvider.environment = 'browser';
+
+                try {
+                    // @ts-ignore
+                    await entropyProvider.getRandomValuesBrowser(new Uint8Array(1));
+                } catch (e) {
+                    expect(e.message).to.equal('AssertError: no browserCrypto in browser environment');
+                }
+            });
+        });
+
+        describe('getRandomValuesNode', () => {
+            it('should throw if nodeCrypto is undefined', async () => {
+                // @ts-ignore
+                entropyProvider.environment = 'node';
+
+                // @ts-ignore
+                entropyProvider.nodeCrypto = undefined;
+
+                try {
+                    // @ts-ignore
+                    await entropyProvider.getRandomValuesNode(new Uint8Array(1));
+                } catch (e) {
+                    expect(e.message).to.equal('AssertError: no nodeCrypto in node environment');
+                }
+            });
         });
     });
 });
