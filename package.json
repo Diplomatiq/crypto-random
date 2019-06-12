@@ -1,6 +1,6 @@
 {
   "name": "@diplomatiq/crypto-random",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Generate cryptographically strong, uniformly distributed random integers from custom intervals, strings from custom character sets, and boolean values.",
   "main": "dist/main.js",
   "module": "dist/main.js",
@@ -11,10 +11,10 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -r ./dist/",
-    "coverage": "nyc report --reporter=lcov && codecov",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",
-    "test": "cross-env-shell TS_NODE_PROJECT=tsconfig.test.json nyc mocha --require ts-node/register --require source-map-support/register --recursive test/**/*.test.ts"
+    "test": "cross-env-shell TS_NODE_PROJECT=tsconfig.test.json nyc --reporter=lcov --reporter=text mocha --require ts-node/register --require source-map-support/register --recursive test/**/*.test.ts",
+    "version": "node --experimental-modules scripts/sync-sonar-version.mjs && git add sonar-project.properties"
   },
   "repository": {
     "type": "git",
@@ -43,7 +43,6 @@
     "@types/node": "^12.0.7",
     "@types/sinon": "^7.0.12",
     "chai": "^4.2.0",
-    "codecov": "^3.5.0",
     "cross-env": "^5.2.0",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
