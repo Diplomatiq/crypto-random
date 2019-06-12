@@ -1,5 +1,7 @@
 # crypto-random
 
+TypeScript/JavaScript library for generating cryptographically strong, uniformly distributed random integers from custom intervals, strings from custom character sets, and boolean values.
+
 <p>
 <a href="https://travis-ci.org/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
 	<img src="https://img.shields.io/travis/Diplomatiq/crypto-random.svg" alt="build status">
@@ -7,14 +9,6 @@
 
 <a href="https://github.com/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
 	<img src="https://img.shields.io/github/languages/top/Diplomatiq/crypto-random.svg" alt="languages used">
-</a>
-
-<a href="https://github.com/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://img.shields.io/github/languages/code-size/Diplomatiq/crypto-random.svg" alt="code size">
-</a>
-
-<a href="https://www.npmjs.com/package/@diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://img.shields.io/bundlephobia/min/@diplomatiq/crypto-random.svg" alt="minified size">
 </a>
 
 <a href="https://www.npmjs.com/package/@diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
@@ -30,7 +24,31 @@
 </a>
 </p>
 
-TypeScript/JavaScript library for generating cryptographically strong, uniformly distributed random integers from custom intervals, strings from custom character sets, and boolean values.
+<p>
+<a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=alert_status" alt="Quality Gate">
+</a>
+
+<a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=coverage" alt="Coverage">
+</a>
+
+<a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=sqale_rating" alt="Maintainability Rating">
+</a>
+
+<a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=reliability_rating" alt="Reliability Rating">
+</a>
+
+<a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
+	<img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=security_rating" alt="Security Rating">
+</a>
+
+<a href="https://github.com/Diplomatiq/crypto-random/pulls?utf8=✓&q=is%3Apr+is%3Aclosed+label%3Adependabot" target="_blank" style="text-decoration: none;">
+	<img src="https://api.dependabot.com/badges/status?host=github&repo=Diplomatiq/crypto-random" alt="Dependabot">
+</a>
+</p>
 
 ---
 
@@ -39,7 +57,7 @@ TypeScript/JavaScript library for generating cryptographically strong, uniformly
 Being an npm package, you can install crypto-random with the following command:
 
 ```
-npm install @diplomatiq/crypto-random
+npm install -P @diplomatiq/crypto-random
 ```
 
 ## Testing
