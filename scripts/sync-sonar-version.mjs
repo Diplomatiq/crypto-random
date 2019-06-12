@@ -1,6 +1,8 @@
 /**
  * This script reads the version from package.json and writes it into
  * the sonar-project.properties file's sonar.projectVersion field.
+ *
+ * Runs automatically on `npm version`.
  */
 
 import { readFileSync, writeFileSync } from 'fs';
