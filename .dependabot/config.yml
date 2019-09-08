@@ -3,10 +3,13 @@ update_configs:
   - package_manager: "javascript"
     directory: "/"
     update_schedule: "live"
+    target_branch: "develop"
     default_reviewers:
-    - "luczsoma"
+      - "luczsoma"
     default_assignees:
-    - "luczsoma"
+      - "luczsoma"
     default_labels:
-    - "dependencies"
-    - "dependabot"
+      - "dependencies"
+      - "dependabot"
+    commit_message:
+      prefix: "chore"
