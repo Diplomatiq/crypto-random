@@ -38,12 +38,15 @@
   },
   "homepage": "https://github.com/Diplomatiq/crypto-random#readme",
   "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/travis-cli": "^8.1.0",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.0.7",
     "@types/sinon": "^7.0.12",
     "chai": "^4.2.0",
     "cross-env": "^5.2.0",
+    "husky": "^3.0.5",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
     "sinon": "^7.3.2",
@@ -53,5 +56,10 @@
   },
   "files": [
     "dist/**/*"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
 }

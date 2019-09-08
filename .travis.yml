@@ -13,5 +13,6 @@ addons:
 install: npm ci
 
 script:
+  - commitlint-travis
   - npm test
   - sonar-scanner
