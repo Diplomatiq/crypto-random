@@ -50,6 +50,12 @@ TypeScript/JavaScript library for generating cryptographically strong, uniformly
 </a>
 </p>
 
+<p>
+<a href="https://gitter.im/Diplomatiq/crypto-random?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" target="_blank" style="text-decoration: none;">
+	<img src="https://badges.gitter.im/Diplomatiq/crypto-random.svg" alt="Gitter">
+</a>
+</p>
+
 ---
 
 ## Installation
