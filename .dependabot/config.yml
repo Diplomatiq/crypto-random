@@ -4,8 +4,6 @@ update_configs:
     directory: "/"
     update_schedule: "live"
     target_branch: "develop"
-    default_reviewers:
-      - "luczsoma"
     default_assignees:
       - "luczsoma"
     default_labels:
