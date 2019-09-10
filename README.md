@@ -1,5 +1,7 @@
 # crypto-random
 
+[![Join the chat at https://gitter.im/Diplomatiq/crypto-random](https://badges.gitter.im/Diplomatiq/crypto-random.svg)](https://gitter.im/Diplomatiq/crypto-random?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 TypeScript/JavaScript library for generating cryptographically strong, uniformly distributed random integers from custom intervals, strings from custom character sets, and boolean values.
 
 <p>
