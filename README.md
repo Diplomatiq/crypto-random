@@ -239,6 +239,10 @@ In this library's context, discrete uniform distribution means that any characte
 
 This library generates its random values complying with the discrete uniform distribution.
 
+## Development
+
+Please see [CONTRIBUTING.md](https://github.com/Diplomatiq/crypto-random/blob/develop/CONTRIBUTING.md) for details.
+
 ---
 
 Copyright (c) 2018 Diplomatiq
