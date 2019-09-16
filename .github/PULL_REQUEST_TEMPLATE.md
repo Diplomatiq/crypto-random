@@ -4,6 +4,7 @@ Please check if your PR fulfills the following requirements:
 
 <!-- Please check all points applying to this PR using an "x". -->
 
+-   [ ] The pull request consists of exactly one commit.
 -   [ ] The commit message follows the [commit message guidelines](https://github.com/Diplomatiq/crypto-random/blob/develop/CONTRIBUTING.md#commit-messages).
 -   [ ] Tests for the changes have been added / updated (for features / bug fixes).
 -   [ ] Docs have been added / updated (for features / bug fixes).
@@ -45,3 +46,5 @@ Issue reference: <!-- e.g. #25 -->
 <!-- If this PR contains a breaking change, please describe the impact and migration path for existing applications below. -->
 
 ## Other information
+
+<!-- Include anything that you find useful for understanding the scope of this PR. -->
