@@ -17,7 +17,7 @@ export class RandomGenerator {
      */
     private readonly entropyProvider: EntropyProvider;
 
-    constructor(entropyProvider: EntropyProvider = new EnvironmentDetectingEntropyProvider()) {
+    public constructor(entropyProvider: EntropyProvider = new EnvironmentDetectingEntropyProvider()) {
         this.entropyProvider = entropyProvider;
     }
 
@@ -208,7 +208,7 @@ export class RandomGenerator {
      * If the alphabet contains at most 256 characters, then Uint8 values are generated, so we need the modulo 256 of
      * the @param alphabetLength, and so on.
      */
-    private async getRemainderForAlphabet(alphabetLength: number): Promise<number> {
+    private getRemainderForAlphabet(alphabetLength: number): number {
         if (alphabetLength <= 0) {
             throw new Error(RandomGeneratorErrorCodes.ALPHABET_LENGTH_GT_ZERO);
         }
@@ -249,7 +249,7 @@ export class RandomGenerator {
             throw new Error(RandomGeneratorErrorCodes.HOW_MANY_GT_ZERO);
         }
 
-        const remainder = await this.getRemainderForAlphabet(alphabetLength);
+        const remainder = this.getRemainderForAlphabet(alphabetLength);
         const charIndexes = new ConfigurableUniquenessStore<number>(unique);
 
         while (charIndexes.size() < howMany) {
