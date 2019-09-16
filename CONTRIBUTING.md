@@ -42,8 +42,9 @@ The following guidelines make easier to maintain a high-quality code base.
 2. Create your improvement to the code base.
 
     - Make sure to follow the [style guide](#style-guide).
-    - Make sure to run tests after your development with `npm test`.
+    - Make sure to run all tests after your development.
     - Make sure to maintain the 100% test coverage.
+    - Make sure to update the documentation if necessary.
     - The CI process will guide you. If it passes, good job! If it fails, it tells you why.
 
 3. Submit your improvement in a pull request.
