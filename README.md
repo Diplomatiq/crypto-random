@@ -68,13 +68,13 @@ npm install -P @diplomatiq/crypto-random
 
 ## Testing
 
-Run unit tests with the following:
+Run tests with the following:
 
 ```
 npm test
 ```
 
-Unit tests do not test the randomness of the output. Please inspect the implementation and the used entropy source.
+Currently the test suite consists of unit tests only. Unit tests do not test the randomness of the output. Please inspect the implementation and the used entropy source. Issue #13 already covers the need of entropy and randomness tests.
 
 ## Usage
 
@@ -127,7 +127,7 @@ bytes(byteCount: number): Promise<Uint8Array>;
  * If generating more than one integers with @param unique = true,
  * the generated integers will be unique in the returned set.
  */
-public async integer(min: number, max: number, howMany = 1, unique = false): Promise<number[]>;
+integer(min: number, max: number, howMany = 1, unique = false): Promise<number[]>;
 ```
 
 ### string(alphabet: string, desiredLength: number, unique = false): Promise\<string>;
@@ -139,7 +139,7 @@ public async integer(min: number, max: number, howMany = 1, unique = false): Pro
  *
  * If generating with @param unique = true, the characters in the string will be unique.
  */
-public async string(alphabet: string, desiredLength: number, unique = false): Promise<string>;
+string(alphabet: string, desiredLength: number, unique = false): Promise<string>;
 ```
 
 ### lowercase(desiredLength: number, unique = false): Promise\<string>;
@@ -241,7 +241,7 @@ This library generates its random values complying with the discrete uniform dis
 
 ## Development
 
-Please see [CONTRIBUTING.md](https://github.com/Diplomatiq/crypto-random/blob/develop/CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](https://github.com/Diplomatiq/crypto-random/blob/develop/CONTRIBUTING.md) for details.
 
 ---
 
