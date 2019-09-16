@@ -24,7 +24,7 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
      */
     private readonly environment: 'browser' | 'node';
 
-    constructor() {
+    public constructor() {
         if (typeof window !== 'undefined' && typeof window.document !== 'undefined') {
             this.environment = 'browser';
             if (typeof window.crypto !== 'undefined' && typeof window.crypto.getRandomValues !== 'undefined') {
@@ -32,7 +32,11 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
             } else {
                 throw new Error('window.crypto.getRandomValues not available');
             }
-        } else if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+        } else if (
+            typeof process !== 'undefined' &&
+            typeof process.versions !== undefined &&
+            typeof process.versions.node !== undefined
+        ) {
             this.environment = 'node';
             try {
                 this.nodeCrypto = require('crypto');
@@ -64,7 +68,7 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
      * it is divided into chunks, and filled chunk-by-chunk.
      * Can be only called, if @member environment is 'browser'.
      */
-    private async getRandomValuesBrowser<T extends UnsignedTypedArray>(array: T): Promise<T> {
+    private getRandomValuesBrowser<T extends UnsignedTypedArray>(array: T): T {
         if (this.environment !== 'browser') {
             throw new Error('AssertError: not in browser environment');
         }
@@ -103,13 +107,13 @@ export class EnvironmentDetectingEntropyProvider implements EntropyProvider {
             throw new Error('not in node environment');
         }
 
-        return new Promise<T>((resolve, reject) => {
+        return new Promise<T>((resolve, reject): void => {
             if (this.nodeCrypto === undefined) {
                 throw new Error('AssertError: no nodeCrypto in node environment');
             }
 
             this.nodeCrypto.randomFill(array, (error: Error | null, array: T) => {
-                if (error) {
+                if (error !== null) {
                     reject(error);
                     return;
                 }
