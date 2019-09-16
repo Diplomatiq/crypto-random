@@ -14,7 +14,7 @@ const sonarVersionRegex = /(sonar\.projectVersion=)[^\s]*/;
 const currentDir = dirname(fileURLToPath(import.meta.url));
 
 const packageJsonPath = join(currentDir, '..', 'package.json');
-const packageJsonContents = readFileSync(packageJsonPath);
+const packageJsonContents = readFileSync(packageJsonPath, { encoding: 'utf-8' });
 const packageJson = JSON.parse(packageJsonContents);
 
 const sonarPropsPath = join(currentDir, '..', 'sonar-project.properties');
