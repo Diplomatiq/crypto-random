@@ -9,11 +9,12 @@ export enum RandomGeneratorErrorCodes {
     MAX_GT_MIN = 'max must be greater than min',
     MAX_MINUS_MIN_PLUS_1_LTE_MAX_ALPHABET_LENGTH = 'max - min + 1 must be less than or equal to RandomGenerator.MAX_ALPHABET_LEN',
     ALPHABET_LENGTH_LTE_MAX_ALPHABET_LENGTH = 'alphabetLength must be less than or equal to RandomGenerator.MAX_ALPHABET_LEN',
-    IF_UNIQUE_TRUE_THEN_HOW_MANY_LTE_ALPHABET_LENGTH = 'if unique = true, howMany must be less than or equal to max - min + 1',
+    IF_UNIQUE_TRUE_THEN_HOW_MANY_LTE_MAX_MINUS_MIN_PLUS_1 = 'if unique = true, howMany must be less than or equal to max - min + 1',
     ALPHABET_NOT_EMPTY = 'alphabet must not be empty',
     ALPHABET_MAX_MAX_ALPHABET_LEN_CHARACTERS = 'alphabet must have maximum RandomGenerator.MAX_ALPHABET_LEN characters',
     DESIRED_LENGTH_GT_ZERO = 'desiredLength must be greater than 0',
     IF_UNIQUE_TRUE_THEN_DESIRED_LENGTH_LTE_ALPHABET_LENGTH = "if unique = true, desiredLength must be less than or equal to the alphabet's length",
+    IF_UNIQUE_TRUE_THEN_HOW_MANY_LTE_ALPHABET_LENGTH = 'if unique = true, howMany must be less than or equal to alphabetLength',
     ALPHABET_LENGTH_GT_ZERO = 'alphabetLength must be greater than 0',
     DESIRED_RANDOM_LENGTH_GT_ZERO = 'desiredRandomLength must be greater than 0',
 }

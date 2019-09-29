@@ -74,7 +74,7 @@ Run tests with the following:
 npm test
 ```
 
-Currently the test suite consists of unit tests only. Unit tests do not test the randomness of the output. Please inspect the implementation and the used entropy source. Issue #13 already covers the need of entropy and randomness tests.
+Besides basic input-output and format tests, the core generation logic is also tested if it correctly produces its output following a uniform distribution. These tests can fail with a minimal probability, and that's fine. The underlying default PRNGs are always considered to be cryptographically secure, so the actual randomness of the output is not tested.
 
 ## Usage
 
@@ -237,7 +237,7 @@ class RandomGenerator {
 
 In this library's context, discrete uniform distribution means that any character from a given alphabet will be chosen with equal probability into the generated random value. At generating any kind of cryptographic keys (passwords, authentication tokens, nonces), uniform distribution is crucial: in every other case the size of the key space decreases in some degree (thus finding the key is easier).
 
-This library generates its random values complying with the discrete uniform distribution.
+This library generates its random values following a discrete uniform distribution.
 
 ## Development
 
