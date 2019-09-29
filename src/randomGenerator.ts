@@ -80,7 +80,7 @@ export class RandomGenerator {
         }
 
         if (unique && howMany > alphabetLength) {
-            throw new Error(RandomGeneratorErrorCodes.IF_UNIQUE_TRUE_THEN_HOW_MANY_LTE_ALPHABET_LENGTH);
+            throw new Error(RandomGeneratorErrorCodes.IF_UNIQUE_TRUE_THEN_HOW_MANY_LTE_MAX_MINUS_MIN_PLUS_1);
         }
 
         const numberIndexes = await this.getUniformlyDistributedRandomCharIndexesOfAlphabet(
@@ -247,6 +247,10 @@ export class RandomGenerator {
 
         if (howMany <= 0) {
             throw new Error(RandomGeneratorErrorCodes.HOW_MANY_GT_ZERO);
+        }
+
+        if (unique && howMany > alphabetLength) {
+            throw new Error(RandomGeneratorErrorCodes.IF_UNIQUE_TRUE_THEN_HOW_MANY_LTE_ALPHABET_LENGTH);
         }
 
         const remainder = this.getRemainderForAlphabet(alphabetLength);

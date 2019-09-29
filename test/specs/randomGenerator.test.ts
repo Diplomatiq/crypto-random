@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import { SinonSpy, spy } from 'sinon';
-import { EntropyProvider } from '../src/entropyProvider';
-import { EnvironmentDetectingEntropyProvider } from '../src/environmentDetectingEntropyProvider';
-import { RandomGenerator } from '../src/randomGenerator';
-import { UnsignedTypedArray } from '../src/unsignedTypedArray';
+import { EntropyProvider } from '../../src/entropyProvider';
+import { EnvironmentDetectingEntropyProvider } from '../../src/environmentDetectingEntropyProvider';
+import { RandomGenerator } from '../../src/randomGenerator';
+import { UnsignedTypedArray } from '../../src/unsignedTypedArray';
 
 describe('RandomGenerator', () => {
     let entropyProvider: EntropyProvider;
@@ -411,6 +411,7 @@ describe('RandomGenerator', () => {
             it('should throw if unique = true && howMany > alphabetLength', async () => {
                 try {
                     await randomGeneratorInstance.integer(0, 1, 3, true);
+                    expect.fail('did not throw');
                 } catch (e) {
                     expect(e.message).to.equal('if unique = true, howMany must be less than or equal to max - min + 1');
                 }
@@ -965,7 +966,7 @@ describe('RandomGenerator', () => {
             it('should throw if alphabetLength = 0', async () => {
                 try {
                     // @ts-ignore
-                    await randomGeneratorInstance.getRemainderForAlphabet(0);
+                    randomGeneratorInstance.getRemainderForAlphabet(0);
                     expect.fail('did not throw');
                 } catch (e) {
                     expect(e.message).to.equal('alphabetLength must be greater than 0');
@@ -975,7 +976,7 @@ describe('RandomGenerator', () => {
             it('should throw if alphabetLength < 0', async () => {
                 try {
                     // @ts-ignore
-                    await randomGeneratorInstance.getRemainderForAlphabet(-1);
+                    randomGeneratorInstance.getRemainderForAlphabet(-1);
                     expect.fail('did not throw');
                 } catch (e) {
                     expect(e.message).to.equal('alphabetLength must be greater than 0');
@@ -985,7 +986,7 @@ describe('RandomGenerator', () => {
             it('should throw if alphabetLength > 4294967296', async () => {
                 try {
                     // @ts-ignore
-                    await randomGeneratorInstance.getRemainderForAlphabet(4294967296 + 1);
+                    randomGeneratorInstance.getRemainderForAlphabet(4294967296 + 1);
                     expect.fail('did not throw');
                 } catch (e) {
                     expect(e.message).to.equal(
@@ -1027,6 +1028,7 @@ describe('RandomGenerator', () => {
                     );
                 }
             });
+
             it('should throw if howMany = 0', async () => {
                 try {
                     // @ts-ignore
@@ -1044,6 +1046,18 @@ describe('RandomGenerator', () => {
                     expect.fail('did not throw');
                 } catch (e) {
                     expect(e.message).to.equal('howMany must be greater than 0');
+                }
+            });
+
+            it('should throw if unique = true && howMany > alphabetLength', async () => {
+                try {
+                    // @ts-ignore
+                    await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(1, 2, true);
+                    expect.fail('did not throw');
+                } catch (e) {
+                    expect(e.message).to.equal(
+                        'if unique = true, howMany must be less than or equal to alphabetLength',
+                    );
                 }
             });
         });

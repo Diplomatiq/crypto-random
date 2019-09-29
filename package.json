@@ -14,7 +14,7 @@
     "lint": "eslint ./src/ --ext .ts",
     "prepare": "npm run build",
     "prepublishOnly": "npm run test",
-    "test": "cross-env-shell TS_NODE_PROJECT=tsconfig.test.json nyc --reporter=lcov --reporter=text mocha --require ts-node/register --require source-map-support/register --recursive test/**/*.test.ts",
+    "test": "cross-env-shell TS_NODE_PROJECT=tsconfig.test.json nyc --reporter=lcov --reporter=text mocha --require ts-node/register --require source-map-support/register --recursive test/specs/**/*.test.ts",
     "version": "node --experimental-modules scripts/sync-sonar-version.mjs && git add sonar-project.properties"
   },
   "repository": {
