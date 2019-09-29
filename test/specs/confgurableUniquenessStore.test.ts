@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { ConfigurableUniquenessStore } from '../src/configurableUniquenessStore';
+import { ConfigurableUniquenessStore } from '../../src/configurableUniquenessStore';
 
 describe('ConfigurableUniquenessStore', () => {
     let configurableUniquenessStore: ConfigurableUniquenessStore<string>;

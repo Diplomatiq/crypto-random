@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { randomFillSync } from 'crypto';
 import { beforeEach } from 'mocha';
-import { EnvironmentDetectingEntropyProvider } from '../src/environmentDetectingEntropyProvider';
-import { UnsignedTypedArray } from '../src/unsignedTypedArray';
+import { EnvironmentDetectingEntropyProvider } from '../../src/environmentDetectingEntropyProvider';
+import { UnsignedTypedArray } from '../../src/unsignedTypedArray';
 
 describe('EnvironmentDetectingEntropyProvider', () => {
     let entropyProvider: EnvironmentDetectingEntropyProvider;
