@@ -4,55 +4,55 @@ TypeScript/JavaScript library for generating cryptographically strong, uniformly
 
 <p>
 <a href="https://travis-ci.org/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://img.shields.io/travis/Diplomatiq/crypto-random.svg" alt="build status">
+  <img src="https://img.shields.io/travis/Diplomatiq/crypto-random.svg" alt="build status">
 </a>
 
 <a href="https://github.com/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://img.shields.io/github/languages/top/Diplomatiq/crypto-random.svg" alt="languages used">
+  <img src="https://img.shields.io/github/languages/top/Diplomatiq/crypto-random.svg" alt="languages used">
 </a>
 
 <a href="https://www.npmjs.com/package/@diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://img.shields.io/npm/dt/@diplomatiq/crypto-random.svg" alt="downloads from npm">
+  <img src="https://img.shields.io/npm/dt/@diplomatiq/crypto-random.svg" alt="downloads from npm">
 </a>
 
 <a href="https://www.npmjs.com/package/@diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://img.shields.io/npm/v/@diplomatiq/crypto-random.svg" alt="latest released version on npm">
+  <img src="https://img.shields.io/npm/v/@diplomatiq/crypto-random.svg" alt="latest released version on npm">
 </a>
 
 <a href="https://github.com/Diplomatiq/crypto-random/blob/master/LICENSE" target="_blank" style="text-decoration: none;">
-	<img src="https://img.shields.io/npm/l/@diplomatiq/crypto-random.svg" alt="license">
+  <img src="https://img.shields.io/npm/l/@diplomatiq/crypto-random.svg" alt="license">
 </a>
 </p>
 
 <p>
 <a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=alert_status" alt="Quality Gate">
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=alert_status" alt="Quality Gate">
 </a>
 
 <a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=coverage" alt="Coverage">
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=coverage" alt="Coverage">
 </a>
 
 <a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=sqale_rating" alt="Maintainability Rating">
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=sqale_rating" alt="Maintainability Rating">
 </a>
 
 <a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=reliability_rating" alt="Reliability Rating">
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=reliability_rating" alt="Reliability Rating">
 </a>
 
 <a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
-	<img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=security_rating" alt="Security Rating">
+  <img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=security_rating" alt="Security Rating">
 </a>
 
 <a href="https://github.com/Diplomatiq/crypto-random/pulls?utf8=✓&q=is%3Apr+is%3Aclosed+label%3Adependabot" target="_blank" style="text-decoration: none;">
-	<img src="https://api.dependabot.com/badges/status?host=github&repo=Diplomatiq/crypto-random" alt="Dependabot">
+  <img src="https://api.dependabot.com/badges/status?host=github&repo=Diplomatiq/crypto-random" alt="Dependabot">
 </a>
 </p>
 
 <p>
 <a href="https://gitter.im/Diplomatiq/crypto-random?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" target="_blank" style="text-decoration: none;">
-	<img src="https://badges.gitter.im/Diplomatiq/crypto-random.svg" alt="Gitter">
+  <img src="https://badges.gitter.im/Diplomatiq/crypto-random.svg" alt="Gitter">
 </a>
 </p>
 
@@ -88,13 +88,13 @@ import { RandomGenerator } from '@diplomatiq/crypto-random';
 // …
 
 async function main() {
-	const randomGenerator = new RandomGenerator();
-	const randomString = await randomGenerator.alphanumeric(32);
-	// randomString will contain a 32-character-long alphanumeric string
+  const randomGenerator = new RandomGenerator();
+  const randomString = await randomGenerator.alphanumeric(32);
+  // randomString will contain a 32-character-long alphanumeric string
 }
 ```
 
-Node.js and browser environments are both supported. For more information, see the **Entropy sources** section below.
+From version 2.0, only browser environments are supported out of the box (the default entropy source being `window.crypto.getRandomValues`). But with minimal additional work, you can inject any other entropy source (e.g. for using crypto-random in a Node.js environment). For more information, see the **Entropy sources** section below.
 
 ## API
 
@@ -198,40 +198,79 @@ boolean(): Promise<boolean>;
 
 ## Entropy sources
 
-### Used entropy sources
+### Default entropy source
 
-In a web browser environment, `window.crypto.getRandomValues`, in a Node.js environment, `crypto.randomFill` is used as the underlying CSPRNG. This is automatically detected by the `RandomGenerator`.
-
-### Using a custom entropy source
-
-**WARNING!** Unless you are a seasoned cryptography expert possessing comprehensive knowledge about random/pseudo-random value generation, **DO NOT use any custom entropy source implementation other than the default**, or found in well-tested, popular libraries survived many years under public scrutiny. Cryptography — and mostly random generation — can be messed up very easily. If you use anything else than a CSPRNG/TRNG for gathering entropy, the values you generate using that entropy source will not be random in the cryptographic meaning, and thus will NOT be suitable for being used as passwords/keys/nonces/etc.
-
-Providing no arguments in the constructor, the `RandomGenerator` is instantiated using the default `EnvironmentDetectingEntropyProvider` as its entropy source. This detects if the code is run in a web browser or in a Node.js process, and uses the available cryptography API on the given platform as its underlying random source. (As stated above: in a web browser, `window.crypto.getRandomValues`, in Node.js, `crypto.randomFill` is used.)
-
-As long as it implements the `EntropyProvider` interface specified below, you can use any kind of entropy source by providing it to the constructor at instantiating the `RandomGenerator`.
+Providing no arguments in the constructor, the `RandomGenerator` is instantiated using the default `BrowserEntropyProvider` as its entropy source. This will look for `window.crypto.getRandomValues`.
 
 ```
 type UnsignedTypedArray = Uint8Array | Uint16Array | Uint32Array;
+```
 
+```
 interface EntropyProvider {
-    getRandomValues<T extends UnsignedTypedArray>(array: T): Promise<T>;
+  getRandomValues<T extends UnsignedTypedArray>(array: T): T | Promise<T>;
 }
 ```
 
 ```
 class RandomGenerator {
-	/**
-	 * Provides entropy in the form of random-filled typed arrays.
-	 */
-	private readonly entropyProvider: EntropyProvider;
+  /**
+   * Provides entropy in the form of random-filled typed arrays.
+   */
+  private readonly entropyProvider: EntropyProvider;
 
-	constructor(entropyProvider: EntropyProvider = new EnvironmentDetectingEntropyProvider()) {
-	    this.entropyProvider = entropyProvider;
-	}
+  constructor(entropyProvider: EntropyProvider = new BrowserEntropyProvider()) {
+      this.entropyProvider = entropyProvider;
+  }
 
-	// …
+  // …
 }
 ```
+
+### Using other entropy sources
+
+You can inject any entropy source into the `RandomGenerator` as long as it implements the required `EntropyProvider` interface specified above.
+
+E.g. in your Node.js application, you can create `nodeJsEntropyProvider.ts`:
+
+```
+import { EntropyProvider, UnsignedTypedArray } from '@diplomatiq/crypto-random';
+import { randomFill } from 'crypto';
+
+export class NodeJsEntropyProvider implements EntropyProvider {
+  public async getRandomValues<T extends UnsignedTypedArray>(array: T): Promise<T> {
+    return new Promise<T>((resolve, reject): void => {
+      randomFill(array, (error: Error | null, array: T) => {
+        if (error !== null) {
+          reject(error);
+          return;
+        }
+        resolve(array);
+      });
+    });
+  }
+}
+```
+
+And then (still in your Node.js application) use `RandomGenerator` as follows:
+
+```
+import { RandomGenerator } from '@diplomatiq/crypto-random';
+import { NodeJsEntropyProvider } from './nodeJsEntropyProvider';
+
+// …
+
+async function main() {
+  const entropyProvider = new NodeJsEntropyProvider();
+  const randomGenerator = new RandomGenerator(entropyProvider);
+  const randomString = await randomGenerator.alphanumeric(32);
+  // randomString will contain a 32-character-long alphanumeric string
+}
+```
+
+### Using a custom entropy source
+
+**WARNING!** Unless you are a seasoned cryptography expert possessing comprehensive knowledge about random/pseudo-random value generation, **DO NOT use any custom entropy source implementation other than the default**, or found in well-tested, popular _cryptographic_ libraries survived many years under public scrutiny. Cryptography — and mostly random generation — can be messed up very easily. If you use anything else than a CSPRNG/TRNG for gathering entropy, the values you generate using that entropy source will not be random in the cryptographic meaning, and thus will NOT be suitable for being used as passwords/keys/nonces/etc.
 
 ## Discrete uniform distribution
 

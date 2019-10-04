@@ -1,17 +1,28 @@
 import { expect } from 'chai';
 import { SinonSpy, spy } from 'sinon';
+import { BrowserEntropyProvider } from '../../src/browserEntropyProvider';
 import { EntropyProvider } from '../../src/entropyProvider';
-import { EnvironmentDetectingEntropyProvider } from '../../src/environmentDetectingEntropyProvider';
 import { RandomGenerator } from '../../src/randomGenerator';
 import { UnsignedTypedArray } from '../../src/unsignedTypedArray';
+import { windowMock } from '../utils/windowMock';
 
 describe('RandomGenerator', () => {
     let entropyProvider: EntropyProvider;
     let getRandomValuesSpy: SinonSpy<[UnsignedTypedArray]>;
     let randomGeneratorInstance: RandomGenerator;
 
+    before(() => {
+        // @ts-ignore
+        global.window = windowMock();
+    });
+
+    after(() => {
+        // @ts-ignore
+        global.window = undefined;
+    });
+
     beforeEach(() => {
-        entropyProvider = new EnvironmentDetectingEntropyProvider();
+        entropyProvider = new BrowserEntropyProvider();
         getRandomValuesSpy = spy(entropyProvider, 'getRandomValues');
         randomGeneratorInstance = new RandomGenerator(entropyProvider);
     });

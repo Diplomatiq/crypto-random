@@ -1,7 +1,7 @@
 import { Alphabets } from './alphabets';
+import { BrowserEntropyProvider } from './browserEntropyProvider';
 import { ConfigurableUniquenessStore } from './configurableUniquenessStore';
 import { EntropyProvider } from './entropyProvider';
-import { EnvironmentDetectingEntropyProvider } from './environmentDetectingEntropyProvider';
 import { RandomGeneratorErrorCodes } from './randomGeneratorErrorCodes';
 import { UnsignedTypedArray } from './unsignedTypedArray';
 
@@ -17,7 +17,7 @@ export class RandomGenerator {
      */
     private readonly entropyProvider: EntropyProvider;
 
-    public constructor(entropyProvider: EntropyProvider = new EnvironmentDetectingEntropyProvider()) {
+    public constructor(entropyProvider: EntropyProvider = new BrowserEntropyProvider()) {
         this.entropyProvider = entropyProvider;
     }
 
