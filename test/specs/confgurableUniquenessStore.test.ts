@@ -6,7 +6,7 @@ describe('ConfigurableUniquenessStore', () => {
 
     describe('with unique = false', () => {
         beforeEach(() => {
-            configurableUniquenessStore = new ConfigurableUniquenessStore(false);
+            configurableUniquenessStore = new ConfigurableUniquenessStore<string>(false);
         });
 
         it('should add non-unique values', () => {
@@ -26,7 +26,7 @@ describe('ConfigurableUniquenessStore', () => {
 
     describe('with unique = true', () => {
         beforeEach(() => {
-            configurableUniquenessStore = new ConfigurableUniquenessStore(true);
+            configurableUniquenessStore = new ConfigurableUniquenessStore<string>(true);
         });
 
         it('should not add non-unique values', () => {

@@ -1,12 +1,27 @@
 import { expect } from 'chai';
 import { RandomGenerator } from '../../src/randomGenerator';
 import { ChiSquaredTest } from '../utils/chiSquaredTest';
+import { windowMock } from '../utils/windowMock';
 
 describe('Generated values should follow a uniform distribution', () => {
     // Setting unique = true would not really have a meaning here, since the output would be biased.
     const unique = false;
 
-    const randomGeneratorInstance = new RandomGenerator();
+    let randomGeneratorInstance: RandomGenerator;
+
+    before(() => {
+        // @ts-ignore
+        global.window = windowMock();
+    });
+
+    after(() => {
+        // @ts-ignore
+        global.window = undefined;
+    });
+
+    beforeEach(() => {
+        randomGeneratorInstance = new RandomGenerator();
+    });
 
     describe('alphabetLength = 2', () => {
         const alphabetLength = 2;
