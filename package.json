@@ -10,10 +10,12 @@
   },
   "scripts": {
     "build": "tsc",
+    "build-and-test-everything": "npm run lint && npm run build && npm run test",
+    "check-release-tag": "node --experimental-modules scripts/check-release-tag.mjs",
     "clean": "rm -r ./dist/",
     "lint": "eslint ./src/ --ext .ts",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run test",
+    "prepare": "npm run build-and-test-everything",
+    "prepublishOnly": "npm run check-release-tag",
     "test": "cross-env-shell TS_NODE_PROJECT=tsconfig.test.json nyc --reporter=lcov --reporter=text mocha --require ts-node/register --require source-map-support/register --recursive test/specs/**/*.test.ts",
     "version": "node --experimental-modules scripts/sync-sonar-version.mjs && conventional-changelog -p angular -i CHANGELOG.md -s && git add sonar-project.properties CHANGELOG.md"
   },
@@ -70,8 +72,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "npm run lint",
-      "pre-push": "npm run lint && npm run test"
+      "pre-push": "npm run build-and-test-everything"
     }
   }
 }
