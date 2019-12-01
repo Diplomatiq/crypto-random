@@ -45,7 +45,7 @@ TypeScript/JavaScript library for generating cryptographically strong, uniformly
   <img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=security_rating" alt="Security Rating">
 </a>
 
-<a href="https://github.com/Diplomatiq/crypto-random/pulls?utf8=✓&q=is%3Apr+is%3Aclosed+label%3Adependabot" target="_blank" style="text-decoration: none;">
+<a href="https://github.com/Diplomatiq/crypto-random/pulls" target="_blank" style="text-decoration: none;">
   <img src="https://api.dependabot.com/badges/status?host=github&repo=Diplomatiq/crypto-random" alt="Dependabot">
 </a>
 </p>
