@@ -62,7 +62,7 @@ TypeScript/JavaScript library for generating cryptographically strong, uniformly
 
 Being an npm package, you can install crypto-random with the following command:
 
-```
+```bash
 npm install -P @diplomatiq/crypto-random
 ```
 
@@ -70,7 +70,7 @@ npm install -P @diplomatiq/crypto-random
 
 Run tests with the following:
 
-```
+```bash
 npm test
 ```
 
@@ -82,15 +82,15 @@ _Note: This package is built as an ES6 package. You will not be able to use `req
 
 After installation, import the `RandomGenerator` class into your project, and use its async API after instantiation:
 
-```
+```typescript
 import { RandomGenerator } from '@diplomatiq/crypto-random';
 
 // …
 
 async function main() {
-  const randomGenerator = new RandomGenerator();
-  const randomString = await randomGenerator.alphanumeric(32);
-  // randomString will contain a 32-character-long alphanumeric string
+    const randomGenerator = new RandomGenerator();
+    const randomString = await randomGenerator.alphanumeric(32);
+    // randomString will contain a 32-character-long alphanumeric string
 }
 ```
 
@@ -104,7 +104,7 @@ The below referenced `MAX_ALPHABET_LEN` value determines the maximum number of e
 
 ### bytes(byteCount: number): Promise\<Uint8Array>;
 
-```
+```typescript
 /**
  * Returns an array of @param byteCount length filled with cryptographically strong random bytes.
  */
@@ -113,7 +113,7 @@ bytes(byteCount: number): Promise<Uint8Array>;
 
 ### integer(min: number, max: number, howMany = 1, unique = false): Promise\<number[]>;
 
-```
+```typescript
 /**
  * Returns a cryptographically strong randomly generated positive integer between @param min and @param max,
  * inclusive.
@@ -132,7 +132,7 @@ integer(min: number, max: number, howMany = 1, unique = false): Promise<number[]
 
 ### string(alphabet: string, desiredLength: number, unique = false): Promise\<string>;
 
-```
+```typescript
 /**
  * Returns a cryptographically strong randomly generated string value with a @param desiredLength length
  * from a given @param alphabet.
@@ -144,7 +144,7 @@ string(alphabet: string, desiredLength: number, unique = false): Promise<string>
 
 ### lowercase(desiredLength: number, unique = false): Promise\<string>;
 
-```
+```typescript
 /**
  * Returns a cryptographically strong randomly generated string with lowercase letters only.
  */
@@ -153,7 +153,7 @@ lowercase(desiredLength: number, unique = false): Promise<string>;
 
 ### uppercase(desiredLength: number, unique = false): Promise\<string>;
 
-```
+```typescript
 /**
  * Returns a cryptographically strong randomly generated string with uppercase letters only.
  */
@@ -162,7 +162,7 @@ uppercase(desiredLength: number, unique = false): Promise<string>;
 
 ### numeric(desiredLength: number, unique = false): Promise\<string>;
 
-```
+```typescript
 /**
  * Returns a cryptographically strong randomly generated string with numeric characters only.
  */
@@ -171,7 +171,7 @@ numeric(desiredLength: number, unique = false): Promise<string>;
 
 ### alphabetic(desiredLength: number, unique = false): Promise\<string>;
 
-```
+```typescript
 /**
  * Returns a cryptographically strong randomly generated string with lower- and uppercase letters only.
  */
@@ -180,7 +180,7 @@ alphabetic(desiredLength: number, unique = false): Promise<string>;
 
 ### alphanumeric(desiredLength: number, unique = false): Promise\<string>;
 
-```
+```typescript
 /**
  * Returns a cryptographically strong randomly generated alphanumeric string.
  */
@@ -189,7 +189,7 @@ alphanumeric(desiredLength: number, unique = false): Promise<string>;
 
 ### boolean(): Promise\<boolean>;
 
-```
+```typescript
 /**
  * Returns a cryptographically strong randomly generated boolean value.
  */
@@ -202,28 +202,28 @@ boolean(): Promise<boolean>;
 
 Providing no arguments in the constructor, the `RandomGenerator` is instantiated using the default `BrowserEntropyProvider` as its entropy source. This will look for `window.crypto.getRandomValues`.
 
-```
+```typescript
 type UnsignedTypedArray = Uint8Array | Uint16Array | Uint32Array;
 ```
 
-```
+```typescript
 interface EntropyProvider {
-  getRandomValues<T extends UnsignedTypedArray>(array: T): T | Promise<T>;
+    getRandomValues<T extends UnsignedTypedArray>(array: T): T | Promise<T>;
 }
 ```
 
-```
+```typescript
 class RandomGenerator {
-  /**
-   * Provides entropy in the form of random-filled typed arrays.
-   */
-  private readonly entropyProvider: EntropyProvider;
+    /**
+     * Provides entropy in the form of random-filled typed arrays.
+     */
+    private readonly entropyProvider: EntropyProvider;
 
-  constructor(entropyProvider: EntropyProvider = new BrowserEntropyProvider()) {
-      this.entropyProvider = entropyProvider;
-  }
+    constructor(entropyProvider: EntropyProvider = new BrowserEntropyProvider()) {
+        this.entropyProvider = entropyProvider;
+    }
 
-  // …
+    // …
 }
 ```
 
@@ -233,38 +233,38 @@ You can inject any entropy source into the `RandomGenerator` as long as it imple
 
 E.g. in your Node.js application, you can create `nodeJsEntropyProvider.ts`:
 
-```
+```typescript
 import { EntropyProvider, UnsignedTypedArray } from '@diplomatiq/crypto-random';
 import { randomFill } from 'crypto';
 
 export class NodeJsEntropyProvider implements EntropyProvider {
-  public async getRandomValues<T extends UnsignedTypedArray>(array: T): Promise<T> {
-    return new Promise<T>((resolve, reject): void => {
-      randomFill(array, (error: Error | null, array: T) => {
-        if (error !== null) {
-          reject(error);
-          return;
-        }
-        resolve(array);
-      });
-    });
-  }
+    public async getRandomValues<T extends UnsignedTypedArray>(array: T): Promise<T> {
+        return new Promise<T>((resolve, reject): void => {
+            randomFill(array, (error: Error | null, array: T) => {
+                if (error !== null) {
+                    reject(error);
+                    return;
+                }
+                resolve(array);
+            });
+        });
+    }
 }
 ```
 
 And then (still in your Node.js application) use `RandomGenerator` as follows:
 
-```
+```typescript
 import { RandomGenerator } from '@diplomatiq/crypto-random';
 import { NodeJsEntropyProvider } from './nodeJsEntropyProvider';
 
 // …
 
 async function main() {
-  const entropyProvider = new NodeJsEntropyProvider();
-  const randomGenerator = new RandomGenerator(entropyProvider);
-  const randomString = await randomGenerator.alphanumeric(32);
-  // randomString will contain a 32-character-long alphanumeric string
+    const entropyProvider = new NodeJsEntropyProvider();
+    const randomGenerator = new RandomGenerator(entropyProvider);
+    const randomString = await randomGenerator.alphanumeric(32);
+    // randomString will contain a 32-character-long alphanumeric string
 }
 ```
 
