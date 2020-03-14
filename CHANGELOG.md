@@ -1,3 +1,12 @@
+<a name="2.2.0"></a>
+# [2.2.0](https://github.com/Diplomatiq/crypto-random/compare/v2.1.0...v2.2.0) (2020-03-14)
+
+
+### SECURITY BULLETIN
+
+* bump acorn from 7.1.0 to 7.1.1 ([7e5a426](https://github.com/Diplomatiq/crypto-random/commit/7e5a426))
+
+
 <a name="2.1.0"></a>
 # [2.1.0](https://github.com/Diplomatiq/crypto-random/compare/v2.0.0...v2.1.0) (2020-02-13)
 
