@@ -73,17 +73,16 @@ export class ChiSquaredTest {
 
     private static pochisq(ax: number, df: number): number {
         let x = ax;
-        let a: number, y: number, s: number;
+        let s: number;
         let e: number, c: number, z: number;
-        let even: boolean;
 
         if (x <= 0.0 || df < 1) {
             return 1.0;
         }
 
-        a = 0.5 * x;
-        even = df % 2 === 0;
-        y = df > 1 ? ChiSquaredTest.ex(-a) : 0;
+        const a = 0.5 * x;
+        const even = df % 2 === 0;
+        const y = df > 1 ? ChiSquaredTest.ex(-a) : 0;
         s = even ? y : 2.0 * ChiSquaredTest.poz(-Math.sqrt(x));
         if (df > 2) {
             x = 0.5 * (df - 1.0);
@@ -96,20 +95,22 @@ export class ChiSquaredTest {
                     s += ChiSquaredTest.ex(c * z - a - e);
                     z += 1.0;
                 }
+
                 return s;
-            } else {
-                e = even ? 1.0 : ChiSquaredTest.I_SQRT_PI / Math.sqrt(a);
-                c = 0.0;
-                while (z <= x) {
-                    e = e * (a / z);
-                    c = c + e;
-                    z += 1.0;
-                }
-                return c * y + s;
             }
-        } else {
-            return s;
+
+            e = even ? 1.0 : ChiSquaredTest.I_SQRT_PI / Math.sqrt(a);
+            c = 0.0;
+            while (z <= x) {
+                e = e * (a / z);
+                c = c + e;
+                z += 1.0;
+            }
+
+            return c * y + s;
         }
+
+        return s;
     }
 
     public static test(generatedValues: number[][], alphabetLength: number): boolean {

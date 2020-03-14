@@ -12,11 +12,13 @@ describe('RandomGenerator', () => {
     let randomGeneratorInstance: RandomGenerator;
 
     before(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = windowMock();
     });
 
     after(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = undefined;
     });
@@ -82,6 +84,7 @@ describe('RandomGenerator', () => {
 
             it('should throw if allocating too much', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.bytes(10 ** 100);
                     expect.fail('did not throw');
@@ -115,12 +118,12 @@ describe('RandomGenerator', () => {
                 const random = await randomGeneratorInstance.integer(min, max, howMany);
 
                 const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint8Count = fetchedUint8ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
                 let cursor = 0;
                 for (const currentUint8Array of fetchedUint8ArrayArrays) {
@@ -131,9 +134,9 @@ describe('RandomGenerator', () => {
                 const alphabetLength = max - min + 1;
                 const remainder = 256 % alphabetLength;
                 const randomNumberIndexes = [];
-                for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
-                    if (fetchedRandomUint8Values[i] >= remainder) {
-                        randomNumberIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                for (const fetchedRandomUint8Value of fetchedRandomUint8Values) {
+                    if (fetchedRandomUint8Value >= remainder) {
+                        randomNumberIndexes.push(fetchedRandomUint8Value % alphabetLength);
                     }
                 }
                 const randomNumbers = randomNumberIndexes.map(i => min + i);
@@ -153,12 +156,12 @@ describe('RandomGenerator', () => {
                 const random = await randomGeneratorInstance.integer(min, max, howMany);
 
                 const fetchedUint16ArrayArrays: Uint16Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint16Count = fetchedUint16ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint16Values = new Uint16Array(fetchedRandomUint16Count);
                 let cursor = 0;
                 for (const currentRandom of fetchedUint16ArrayArrays) {
@@ -169,9 +172,9 @@ describe('RandomGenerator', () => {
                 const alphabetLength = max - min + 1;
                 const remainder = 65536 % alphabetLength;
                 const randomNumberIndexes = [];
-                for (let i = 0; i < fetchedRandomUint16Values.length; i++) {
-                    if (fetchedRandomUint16Values[i] >= remainder) {
-                        randomNumberIndexes.push(fetchedRandomUint16Values[i] % alphabetLength);
+                for (const fetchedRandomUint16Value of fetchedRandomUint16Values) {
+                    if (fetchedRandomUint16Value >= remainder) {
+                        randomNumberIndexes.push(fetchedRandomUint16Value % alphabetLength);
                     }
                 }
                 const randomNumbers = randomNumberIndexes.map(i => min + i);
@@ -191,12 +194,12 @@ describe('RandomGenerator', () => {
                 const random = await randomGeneratorInstance.integer(min, max, howMany);
 
                 const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint32Count = fetchedUint32ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
                 let cursor = 0;
                 for (const currentRandom of fetchedUint32ArrayArrays) {
@@ -207,9 +210,9 @@ describe('RandomGenerator', () => {
                 const alphabetLength = max - min + 1;
                 const remainder = 4294967296 % alphabetLength;
                 const randomNumberIndexes = [];
-                for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
-                    if (fetchedRandomUint32Values[i] >= remainder) {
-                        randomNumberIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                for (const fetchedRandomUint32Value of fetchedRandomUint32Values) {
+                    if (fetchedRandomUint32Value >= remainder) {
+                        randomNumberIndexes.push(fetchedRandomUint32Value % alphabetLength);
                     }
                 }
                 const randomNumbers = randomNumberIndexes.map(i => min + i);
@@ -229,12 +232,12 @@ describe('RandomGenerator', () => {
                 const random = await randomGeneratorInstance.integer(min, max, howMany);
 
                 const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint32Count = fetchedUint32ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
                 let cursor = 0;
                 for (const currentRandom of fetchedUint32ArrayArrays) {
@@ -245,9 +248,9 @@ describe('RandomGenerator', () => {
                 const alphabetLength = max - min + 1;
                 const remainder = 4294967296 % alphabetLength;
                 const randomNumberIndexes = [];
-                for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
-                    if (fetchedRandomUint32Values[i] >= remainder) {
-                        randomNumberIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                for (const fetchedRandomUint32Value of fetchedRandomUint32Values) {
+                    if (fetchedRandomUint32Value >= remainder) {
+                        randomNumberIndexes.push(fetchedRandomUint32Value % alphabetLength);
                     }
                 }
                 const randomNumbers = randomNumberIndexes.map(i => min + i);
@@ -267,12 +270,12 @@ describe('RandomGenerator', () => {
                 const random = await randomGeneratorInstance.integer(min, max, howMany);
 
                 const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint32Count = fetchedUint32ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
                 let cursor = 0;
                 for (const currentRandom of fetchedUint32ArrayArrays) {
@@ -283,9 +286,9 @@ describe('RandomGenerator', () => {
                 const alphabetLength = max - min + 1;
                 const remainder = 4294967296 % alphabetLength;
                 const randomNumberIndexes = [];
-                for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
-                    if (fetchedRandomUint32Values[i] >= remainder) {
-                        randomNumberIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                for (const fetchedRandomUint32Value of fetchedRandomUint32Values) {
+                    if (fetchedRandomUint32Value >= remainder) {
+                        randomNumberIndexes.push(fetchedRandomUint32Value % alphabetLength);
                     }
                 }
                 const randomNumbers = randomNumberIndexes.map(i => min + i);
@@ -305,12 +308,12 @@ describe('RandomGenerator', () => {
                 const random = await randomGeneratorInstance.integer(min, max, howMany);
 
                 const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint32Count = fetchedUint32ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
                 let cursor = 0;
                 for (const currentRandom of fetchedUint32ArrayArrays) {
@@ -321,9 +324,9 @@ describe('RandomGenerator', () => {
                 const alphabetLength = max - min + 1;
                 const remainder = 4294967296 % alphabetLength;
                 const randomNumberIndexes = [];
-                for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
-                    if (fetchedRandomUint32Values[i] >= remainder) {
-                        randomNumberIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                for (const fetchedRandomUint32Value of fetchedRandomUint32Values) {
+                    if (fetchedRandomUint32Value >= remainder) {
+                        randomNumberIndexes.push(fetchedRandomUint32Value % alphabetLength);
                     }
                 }
                 const randomNumbers = randomNumberIndexes.map(i => min + i);
@@ -436,12 +439,12 @@ describe('RandomGenerator', () => {
                 const random = await randomGeneratorInstance.string(alphabet, desiredLength);
 
                 const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint8Count = fetchedUint8ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
                 let cursor = 0;
                 for (const currentUint8Array of fetchedUint8ArrayArrays) {
@@ -452,9 +455,9 @@ describe('RandomGenerator', () => {
                 const alphabetLength = alphabet.length;
                 const remainder = 256 % alphabetLength;
                 const randomCharIndexes = [];
-                for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
-                    if (fetchedRandomUint8Values[i] >= remainder) {
-                        randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                for (const fetchedRandomUint8Value of fetchedRandomUint8Values) {
+                    if (fetchedRandomUint8Value >= remainder) {
+                        randomCharIndexes.push(fetchedRandomUint8Value % alphabetLength);
                     }
                 }
                 const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
@@ -471,12 +474,12 @@ describe('RandomGenerator', () => {
                 const random = await randomGeneratorInstance.string(alphabet, desiredLength);
 
                 const fetchedUint16ArrayArrays: Uint16Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint16Count = fetchedUint16ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint16Values = new Uint16Array(fetchedRandomUint16Count);
                 let cursor = 0;
                 for (const currentUint16Array of fetchedUint16ArrayArrays) {
@@ -487,9 +490,9 @@ describe('RandomGenerator', () => {
                 const alphabetLength = alphabet.length;
                 const remainder = 65536 % alphabetLength;
                 const randomCharIndexes = [];
-                for (let i = 0; i < fetchedRandomUint16Values.length; i++) {
-                    if (fetchedRandomUint16Values[i] >= remainder) {
-                        randomCharIndexes.push(fetchedRandomUint16Values[i] % alphabetLength);
+                for (const fetchedRandomUint16Value of fetchedRandomUint16Values) {
+                    if (fetchedRandomUint16Value >= remainder) {
+                        randomCharIndexes.push(fetchedRandomUint16Value % alphabetLength);
                     }
                 }
                 const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
@@ -506,12 +509,12 @@ describe('RandomGenerator', () => {
                 const random = await randomGeneratorInstance.string(alphabet, desiredLength);
 
                 const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint32Count = fetchedUint32ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
                 let cursor = 0;
                 for (const currentUint32Array of fetchedUint32ArrayArrays) {
@@ -522,9 +525,9 @@ describe('RandomGenerator', () => {
                 const alphabetLength = alphabet.length;
                 const remainder = 4294967296 % alphabetLength;
                 const randomCharIndexes = [];
-                for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
-                    if (fetchedRandomUint32Values[i] >= remainder) {
-                        randomCharIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                for (const fetchedRandomUint32Value of fetchedRandomUint32Values) {
+                    if (fetchedRandomUint32Value >= remainder) {
+                        randomCharIndexes.push(fetchedRandomUint32Value % alphabetLength);
                     }
                 }
                 const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
@@ -541,12 +544,12 @@ describe('RandomGenerator', () => {
                 const random = await randomGeneratorInstance.string(alphabet, desiredLength);
 
                 const fetchedUint32ArrayArrays: Uint32Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint32Count = fetchedUint32ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint32Values = new Uint32Array(fetchedRandomUint32Count);
                 let cursor = 0;
                 for (const currentUint32Array of fetchedUint32ArrayArrays) {
@@ -557,9 +560,9 @@ describe('RandomGenerator', () => {
                 const alphabetLength = alphabet.length;
                 const remainder = 4294967296 % alphabetLength;
                 const randomCharIndexes = [];
-                for (let i = 0; i < fetchedRandomUint32Values.length; i++) {
-                    if (fetchedRandomUint32Values[i] >= remainder) {
-                        randomCharIndexes.push(fetchedRandomUint32Values[i] % alphabetLength);
+                for (const fetchedRandomUint32Value of fetchedRandomUint32Values) {
+                    if (fetchedRandomUint32Value >= remainder) {
+                        randomCharIndexes.push(fetchedRandomUint32Value % alphabetLength);
                     }
                 }
                 const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
@@ -586,7 +589,7 @@ describe('RandomGenerator', () => {
                 };
 
                 try {
-                    await randomGeneratorInstance.string((fakeString as any) as string, 1);
+                    await randomGeneratorInstance.string((fakeString as unknown) as string, 1);
                     expect.fail('did not throw');
                 } catch (e) {
                     expect(e.message).to.equal(
@@ -630,12 +633,12 @@ describe('RandomGenerator', () => {
                 const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
                 const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint8Count = fetchedUint8ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
                 let cursor = 0;
                 for (const currentUint8Array of fetchedUint8ArrayArrays) {
@@ -646,15 +649,15 @@ describe('RandomGenerator', () => {
                 const alphabetLength = alphabet.length;
                 const remainder = 256 % alphabetLength;
                 const randomCharIndexes = [];
-                for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
-                    if (fetchedRandomUint8Values[i] >= remainder) {
-                        randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                for (const fetchedRandomUint8Value of fetchedRandomUint8Values) {
+                    if (fetchedRandomUint8Value >= remainder) {
+                        randomCharIndexes.push(fetchedRandomUint8Value % alphabetLength);
                     }
                 }
                 const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
 
                 expect(random).to.deep.equal(randomChars);
-                expect(/^[a-z]{20}$/.test(random)).to.be.true;
+                expect(/^[a-z]{20}$/u.test(random)).to.be.true;
             });
 
             it('should throw if desiredLength = 0', async () => {
@@ -682,12 +685,12 @@ describe('RandomGenerator', () => {
                 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
                 const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint8Count = fetchedUint8ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
                 let cursor = 0;
                 for (const currentUint8Array of fetchedUint8ArrayArrays) {
@@ -698,15 +701,15 @@ describe('RandomGenerator', () => {
                 const alphabetLength = alphabet.length;
                 const remainder = 256 % alphabetLength;
                 const randomCharIndexes = [];
-                for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
-                    if (fetchedRandomUint8Values[i] >= remainder) {
-                        randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                for (const fetchedRandomUint8Value of fetchedRandomUint8Values) {
+                    if (fetchedRandomUint8Value >= remainder) {
+                        randomCharIndexes.push(fetchedRandomUint8Value % alphabetLength);
                     }
                 }
                 const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
 
                 expect(random).to.deep.equal(randomChars);
-                expect(/^[A-Z]{20}$/.test(random)).to.be.true;
+                expect(/^[A-Z]{20}$/u.test(random)).to.be.true;
             });
 
             it('should throw if desiredLength = 0', async () => {
@@ -734,12 +737,12 @@ describe('RandomGenerator', () => {
                 const alphabet = '0123456789';
 
                 const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint8Count = fetchedUint8ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
                 let cursor = 0;
                 for (const currentUint8Array of fetchedUint8ArrayArrays) {
@@ -750,15 +753,15 @@ describe('RandomGenerator', () => {
                 const alphabetLength = alphabet.length;
                 const remainder = 256 % alphabetLength;
                 const randomCharIndexes = [];
-                for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
-                    if (fetchedRandomUint8Values[i] >= remainder) {
-                        randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                for (const fetchedRandomUint8Value of fetchedRandomUint8Values) {
+                    if (fetchedRandomUint8Value >= remainder) {
+                        randomCharIndexes.push(fetchedRandomUint8Value % alphabetLength);
                     }
                 }
                 const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
 
                 expect(random).to.deep.equal(randomChars);
-                expect(/^[0-9]{20}$/.test(random)).to.be.true;
+                expect(/^[0-9]{20}$/u.test(random)).to.be.true;
             });
 
             it('should throw if desiredLength = 0', async () => {
@@ -786,12 +789,12 @@ describe('RandomGenerator', () => {
                 const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
                 const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint8Count = fetchedUint8ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
                 let cursor = 0;
                 for (const currentUint8Array of fetchedUint8ArrayArrays) {
@@ -802,15 +805,15 @@ describe('RandomGenerator', () => {
                 const alphabetLength = alphabet.length;
                 const remainder = 256 % alphabetLength;
                 const randomCharIndexes = [];
-                for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
-                    if (fetchedRandomUint8Values[i] >= remainder) {
-                        randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                for (const fetchedRandomUint8Value of fetchedRandomUint8Values) {
+                    if (fetchedRandomUint8Value >= remainder) {
+                        randomCharIndexes.push(fetchedRandomUint8Value % alphabetLength);
                     }
                 }
                 const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
 
                 expect(random).to.deep.equal(randomChars);
-                expect(/^[a-zA-Z]{20}$/.test(random)).to.be.true;
+                expect(/^[a-zA-Z]{20}$/u.test(random)).to.be.true;
             });
 
             it('should throw if desiredLength = 0', async () => {
@@ -838,12 +841,12 @@ describe('RandomGenerator', () => {
                 const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
                 const fetchedUint8ArrayArrays: Uint8Array[] = await Promise.all(
-                    getRandomValuesSpy.getCalls().map(async c => await c.returnValue),
+                    getRandomValuesSpy.getCalls().map(c => c.returnValue),
                 );
 
                 const fetchedRandomUint8Count = fetchedUint8ArrayArrays
                     .map(a => a.length)
-                    .reduce((acc, curr) => (acc += curr));
+                    .reduce((acc, curr) => acc + curr);
                 const fetchedRandomUint8Values = new Uint8Array(fetchedRandomUint8Count);
                 let cursor = 0;
                 for (const currentUint8Array of fetchedUint8ArrayArrays) {
@@ -854,15 +857,15 @@ describe('RandomGenerator', () => {
                 const alphabetLength = alphabet.length;
                 const remainder = 256 % alphabetLength;
                 const randomCharIndexes = [];
-                for (let i = 0; i < fetchedRandomUint8Values.length; i++) {
-                    if (fetchedRandomUint8Values[i] >= remainder) {
-                        randomCharIndexes.push(fetchedRandomUint8Values[i] % alphabetLength);
+                for (const fetchedRandomUint8Value of fetchedRandomUint8Values) {
+                    if (fetchedRandomUint8Value >= remainder) {
+                        randomCharIndexes.push(fetchedRandomUint8Value % alphabetLength);
                     }
                 }
                 const randomChars = randomCharIndexes.map(i => alphabet.charAt(i)).join('');
 
                 expect(random).to.deep.equal(randomChars);
-                expect(/^[a-zA-Z0-9]{20}$/.test(random)).to.be.true;
+                expect(/^[a-zA-Z0-9]{20}$/u.test(random)).to.be.true;
             });
 
             it('should throw if desiredLength = 0', async () => {
@@ -912,6 +915,7 @@ describe('RandomGenerator', () => {
         describe('getRandomArrayForAlphabet', () => {
             it('should throw if alphabetLength = 0', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getRandomArrayForAlphabet(0, 1);
                     expect.fail('did not throw');
@@ -922,6 +926,7 @@ describe('RandomGenerator', () => {
 
             it('should throw if alphabetLength < 0', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getRandomArrayForAlphabet(-1, 1);
                     expect.fail('did not throw');
@@ -932,6 +937,7 @@ describe('RandomGenerator', () => {
 
             it('should throw if alphabetLength > 4294967296', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getRandomArrayForAlphabet(4294967296 + 1, 1);
                     expect.fail('did not throw');
@@ -944,6 +950,7 @@ describe('RandomGenerator', () => {
 
             it('should throw if desiredRandomLength = 0', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getRandomArrayForAlphabet(1, 0);
                     expect.fail('did not throw');
@@ -954,6 +961,7 @@ describe('RandomGenerator', () => {
 
             it('should throw if desiredRandomLength < 0', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getRandomArrayForAlphabet(1, -1);
                     expect.fail('did not throw');
@@ -964,6 +972,7 @@ describe('RandomGenerator', () => {
 
             it('should throw if allocating too much', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getRandomArrayForAlphabet(65537, 10 ** 100);
                     expect.fail('did not throw');
@@ -974,8 +983,9 @@ describe('RandomGenerator', () => {
         });
 
         describe('getRemainderForAlphabet', () => {
-            it('should throw if alphabetLength = 0', async () => {
+            it('should throw if alphabetLength = 0', () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     randomGeneratorInstance.getRemainderForAlphabet(0);
                     expect.fail('did not throw');
@@ -984,8 +994,9 @@ describe('RandomGenerator', () => {
                 }
             });
 
-            it('should throw if alphabetLength < 0', async () => {
+            it('should throw if alphabetLength < 0', () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     randomGeneratorInstance.getRemainderForAlphabet(-1);
                     expect.fail('did not throw');
@@ -994,8 +1005,9 @@ describe('RandomGenerator', () => {
                 }
             });
 
-            it('should throw if alphabetLength > 4294967296', async () => {
+            it('should throw if alphabetLength > 4294967296', () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     randomGeneratorInstance.getRemainderForAlphabet(4294967296 + 1);
                     expect.fail('did not throw');
@@ -1010,6 +1022,7 @@ describe('RandomGenerator', () => {
         describe('getUniformlyDistributedRandomCharIndexesOfAlphabet', () => {
             it('should throw if alphabetLength = 0', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(0, 1);
                     expect.fail('did not throw');
@@ -1020,6 +1033,7 @@ describe('RandomGenerator', () => {
 
             it('should throw if alphabetLength < 0', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(-1, 1);
                     expect.fail('did not throw');
@@ -1030,6 +1044,7 @@ describe('RandomGenerator', () => {
 
             it('should throw if alphabetLength > 4294967296', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(4294967296 + 1, 1);
                     expect.fail('did not throw');
@@ -1042,6 +1057,7 @@ describe('RandomGenerator', () => {
 
             it('should throw if howMany = 0', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(1, 0);
                     expect.fail('did not throw');
@@ -1052,6 +1068,7 @@ describe('RandomGenerator', () => {
 
             it('should throw if howMany < 0', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(1, -1);
                     expect.fail('did not throw');
@@ -1062,6 +1079,7 @@ describe('RandomGenerator', () => {
 
             it('should throw if unique = true && howMany > alphabetLength', async () => {
                 try {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                     // @ts-ignore
                     await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(1, 2, true);
                     expect.fail('did not throw');
