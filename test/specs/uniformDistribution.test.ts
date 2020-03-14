@@ -10,11 +10,13 @@ describe('Generated values should follow a uniform distribution', () => {
     let randomGeneratorInstance: RandomGenerator;
 
     before(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = windowMock();
     });
 
     after(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = undefined;
     });
@@ -29,8 +31,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 10', async () => {
             const howMany = 10;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -47,8 +50,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100', async () => {
             const howMany = 100;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -65,8 +69,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 1000', async () => {
             const howMany = 1000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -83,8 +88,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100000', async () => {
             const howMany = 100000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -105,8 +111,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 10', async () => {
             const howMany = 10;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -123,8 +130,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100', async () => {
             const howMany = 100;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -141,8 +149,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 1000', async () => {
             const howMany = 1000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -159,8 +168,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100000', async () => {
             const howMany = 100000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -181,8 +191,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 10', async () => {
             const howMany = 10;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -199,8 +210,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100', async () => {
             const howMany = 100;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -217,8 +229,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 1000', async () => {
             const howMany = 1000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -235,8 +248,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100000', async () => {
             const howMany = 100000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -257,8 +271,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 10', async () => {
             const howMany = 10;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -275,8 +290,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100', async () => {
             const howMany = 100;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -293,8 +309,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 1000', async () => {
             const howMany = 1000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -311,8 +328,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100000', async () => {
             const howMany = 100000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -333,8 +351,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 10', async () => {
             const howMany = 10;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -351,8 +370,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100', async () => {
             const howMany = 100;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -369,8 +389,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 1000', async () => {
             const howMany = 1000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -387,8 +408,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100000', async () => {
             const howMany = 100000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -409,8 +431,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 10', async () => {
             const howMany = 10;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -427,8 +450,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100', async () => {
             const howMany = 100;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -445,8 +469,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 1000', async () => {
             const howMany = 1000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,
@@ -463,8 +488,9 @@ describe('Generated values should follow a uniform distribution', () => {
         it('howMany = 100000', async () => {
             const howMany = 100000;
 
-            let generatedValues: number[][] = [];
+            const generatedValues: number[][] = [];
             for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
                 // @ts-ignore
                 const random = await randomGeneratorInstance.getUniformlyDistributedRandomCharIndexesOfAlphabet(
                     alphabetLength,

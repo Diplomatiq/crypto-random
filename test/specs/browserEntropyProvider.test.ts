@@ -8,11 +8,13 @@ describe('BrowserEntropyProvider', () => {
     let entropyProvider: EntropyProvider;
 
     before(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = windowMock();
     });
 
     after(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = undefined;
     });
@@ -39,51 +41,61 @@ describe('BrowserEntropyProvider', () => {
     });
 
     it('should throw if window is not available', () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = undefined;
 
         try {
+            // eslint-disable-next-line no-new
             new BrowserEntropyProvider();
             expect.fail('did not throw');
         } catch (e) {
             expect(e.message).to.equal('window.crypto.getRandomValues is not available');
         }
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = windowMock();
     });
 
     it('should throw if window.crypto is not available', () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window.crypto = undefined;
 
         try {
+            // eslint-disable-next-line no-new
             new BrowserEntropyProvider();
             expect.fail('did not throw');
         } catch (e) {
             expect(e.message).to.equal('window.crypto.getRandomValues is not available');
         }
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = windowMock();
     });
 
     it('should throw if window.crypto.getRandomValues is not available', () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window.crypto.getRandomValues = undefined;
 
         try {
+            // eslint-disable-next-line no-new
             new BrowserEntropyProvider();
             expect.fail('did not throw');
         } catch (e) {
             expect(e.message).to.equal('window.crypto.getRandomValues is not available');
         }
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = windowMock();
     });
 
     it('should throw if browserCrypto is undefined', async () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         entropyProvider.crypto = undefined;
 
