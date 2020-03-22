@@ -4,43 +4,43 @@ import { BrowserEntropyProvider } from '../../src/browserEntropyProvider';
 import { EntropyProvider } from '../../src/entropyProvider';
 import { windowMock } from '../utils/windowMock';
 
-describe('BrowserEntropyProvider', () => {
+describe('BrowserEntropyProvider', (): void => {
     let entropyProvider: EntropyProvider;
 
-    before(() => {
+    before((): void => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = windowMock();
     });
 
-    after(() => {
+    after((): void => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = undefined;
     });
 
-    beforeEach(() => {
+    beforeEach((): void => {
         entropyProvider = new BrowserEntropyProvider();
     });
 
-    it('should work', async () => {
+    it('should work', async (): Promise<void> => {
         const array = new Uint8Array(10);
-        expect(array.every(v => v === 0)).to.be.true;
+        expect(array.every((v): boolean => v === 0)).to.be.true;
         const sameArray = await entropyProvider.getRandomValues(array);
         expect(array).to.deep.equal(sameArray);
-        expect(array.some(v => v !== 0)).to.be.true;
+        expect(array.some((v): boolean => v !== 0)).to.be.true;
     });
 
-    it('should work for arrays larger than 65536 bytes', async () => {
+    it('should work for arrays larger than 65536 bytes', async (): Promise<void> => {
         const array = new Uint8Array(100000);
-        expect(array.every(v => v === 0)).to.be.true;
+        expect(array.every((v): boolean => v === 0)).to.be.true;
         const sameArray = await entropyProvider.getRandomValues(array);
         expect(array).to.deep.equal(sameArray);
-        expect(array.some(v => v !== 0)).to.be.true;
-        expect(array.subarray(80000, 90000).some(v => v !== 0)).to.be.true;
+        expect(array.some((v): boolean => v !== 0)).to.be.true;
+        expect(array.subarray(80000, 90000).some((v): boolean => v !== 0)).to.be.true;
     });
 
-    it('should throw if window is not available', () => {
+    it('should throw if window is not available', (): void => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window = undefined;
@@ -58,7 +58,7 @@ describe('BrowserEntropyProvider', () => {
         global.window = windowMock();
     });
 
-    it('should throw if window.crypto is not available', () => {
+    it('should throw if window.crypto is not available', (): void => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window.crypto = undefined;
@@ -76,7 +76,7 @@ describe('BrowserEntropyProvider', () => {
         global.window = windowMock();
     });
 
-    it('should throw if window.crypto.getRandomValues is not available', () => {
+    it('should throw if window.crypto.getRandomValues is not available', (): void => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         global.window.crypto.getRandomValues = undefined;
@@ -94,7 +94,7 @@ describe('BrowserEntropyProvider', () => {
         global.window = windowMock();
     });
 
-    it('should throw if browserCrypto is undefined', async () => {
+    it('should throw if browserCrypto is undefined', async (): Promise<void> => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         entropyProvider.crypto = undefined;
