@@ -3,14 +3,14 @@ import { UnsignedTypedArray } from './unsignedTypedArray';
 
 export class BrowserEntropyProvider implements EntropyProvider {
     /**
-     * The crypto implementation used in the browser. The window.crypto object is used.
-     */
-    private readonly crypto?: Crypto;
-
-    /**
      * According to the Web Crypto standard, there is a 2 ** 16 bytes quota for requesting entropy at once.
      */
     private static readonly BROWSER_ENTROPY_QUOTA_BYTES = 65536;
+
+    /**
+     * The crypto implementation used in the browser. The window.crypto object is used.
+     */
+    private readonly crypto?: Crypto;
 
     public constructor() {
         if (
