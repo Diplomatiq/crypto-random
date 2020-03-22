@@ -13,6 +13,80 @@ export class ChiSquaredTest {
     private static readonly I_SQRT_PI = 0.5641895835477562869480795;
     private static readonly BIGX = 20.0;
 
+    public static test(generatedValues: number[][], alphabetLength: number): boolean {
+        if (generatedValues.length !== ChiSquaredTest.TEST_TRIES) {
+            throw new Error('generatedValues.length must be equal to ChiSquaredTest.TEST_TRIES');
+        }
+
+        const df = alphabetLength - 1;
+        const expectedFrequency = generatedValues[0].length / alphabetLength;
+
+        let failCount = 0;
+
+        for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
+            const random = generatedValues[i];
+
+            const observationCountByValues = Array(alphabetLength).fill(0);
+            for (const v of random) {
+                observationCountByValues[v]++;
+            }
+
+            let test = 0;
+            for (let i = 0; i < alphabetLength; i++) {
+                test += (observationCountByValues[i] - expectedFrequency) ** 2 / expectedFrequency;
+            }
+
+            const p = ChiSquaredTest.pochisq(test, df);
+            if (p < ChiSquaredTest.TEST_TRESHOLD || p > 1 - ChiSquaredTest.TEST_TRESHOLD) {
+                failCount++;
+            }
+        }
+
+        return failCount <= ChiSquaredTest.TEST_ALLOWED_FAILS;
+    }
+
+    private static pochisq(ax: number, df: number): number {
+        let x = ax;
+        let s: number;
+        let e: number, c: number, z: number;
+
+        if (x <= 0.0 || df < 1) {
+            return 1.0;
+        }
+
+        const a = 0.5 * x;
+        const even = df % 2 === 0;
+        const y = df > 1 ? ChiSquaredTest.ex(-a) : 0;
+        s = even ? y : 2.0 * ChiSquaredTest.poz(-Math.sqrt(x));
+        if (df > 2) {
+            x = 0.5 * (df - 1.0);
+            z = even ? 1.0 : 0.5;
+            if (a > ChiSquaredTest.BIGX) {
+                e = even ? 0.0 : ChiSquaredTest.LOG_SQRT_PI;
+                c = Math.log(a);
+                while (z <= x) {
+                    e = Math.log(z) + e;
+                    s += ChiSquaredTest.ex(c * z - a - e);
+                    z += 1.0;
+                }
+
+                return s;
+            }
+
+            e = even ? 1.0 : ChiSquaredTest.I_SQRT_PI / Math.sqrt(a);
+            c = 0.0;
+            while (z <= x) {
+                e = e * (a / z);
+                c = c + e;
+                z += 1.0;
+            }
+
+            return c * y + s;
+        }
+
+        return s;
+    }
+
     private static ex(x: number): number {
         return x < -ChiSquaredTest.BIGX ? 0.0 : Math.exp(x);
     }
@@ -69,79 +143,5 @@ export class ChiSquaredTest {
             }
         }
         return z > 0.0 ? (x + 1.0) * 0.5 : (1.0 - x) * 0.5;
-    }
-
-    private static pochisq(ax: number, df: number): number {
-        let x = ax;
-        let s: number;
-        let e: number, c: number, z: number;
-
-        if (x <= 0.0 || df < 1) {
-            return 1.0;
-        }
-
-        const a = 0.5 * x;
-        const even = df % 2 === 0;
-        const y = df > 1 ? ChiSquaredTest.ex(-a) : 0;
-        s = even ? y : 2.0 * ChiSquaredTest.poz(-Math.sqrt(x));
-        if (df > 2) {
-            x = 0.5 * (df - 1.0);
-            z = even ? 1.0 : 0.5;
-            if (a > ChiSquaredTest.BIGX) {
-                e = even ? 0.0 : ChiSquaredTest.LOG_SQRT_PI;
-                c = Math.log(a);
-                while (z <= x) {
-                    e = Math.log(z) + e;
-                    s += ChiSquaredTest.ex(c * z - a - e);
-                    z += 1.0;
-                }
-
-                return s;
-            }
-
-            e = even ? 1.0 : ChiSquaredTest.I_SQRT_PI / Math.sqrt(a);
-            c = 0.0;
-            while (z <= x) {
-                e = e * (a / z);
-                c = c + e;
-                z += 1.0;
-            }
-
-            return c * y + s;
-        }
-
-        return s;
-    }
-
-    public static test(generatedValues: number[][], alphabetLength: number): boolean {
-        if (generatedValues.length !== ChiSquaredTest.TEST_TRIES) {
-            throw new Error('generatedValues.length must be equal to ChiSquaredTest.TEST_TRIES');
-        }
-
-        const df = alphabetLength - 1;
-        const expectedFrequency = generatedValues[0].length / alphabetLength;
-
-        let failCount = 0;
-
-        for (let i = 0; i < ChiSquaredTest.TEST_TRIES; i++) {
-            const random = generatedValues[i];
-
-            const observationCountByValues = Array(alphabetLength).fill(0);
-            for (const v of random) {
-                observationCountByValues[v]++;
-            }
-
-            let test = 0;
-            for (let i = 0; i < alphabetLength; i++) {
-                test += (observationCountByValues[i] - expectedFrequency) ** 2 / expectedFrequency;
-            }
-
-            const p = ChiSquaredTest.pochisq(test, df);
-            if (p < ChiSquaredTest.TEST_TRESHOLD || p > 1 - ChiSquaredTest.TEST_TRESHOLD) {
-                failCount++;
-            }
-        }
-
-        return failCount <= ChiSquaredTest.TEST_ALLOWED_FAILS;
     }
 }

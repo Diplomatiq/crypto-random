@@ -43,7 +43,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
     "@commitlint/travis-cli": "^8.1.0",
-    "@diplomatiq/eslint-config-tslib": "^2.0.0",
+    "@diplomatiq/eslint-config-tslib": "^3.0.0",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^7.0.1",
     "@types/node": "^13.1.0",
