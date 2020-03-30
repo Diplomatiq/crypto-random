@@ -94,7 +94,7 @@ async function main() {
 }
 ```
 
-From version 2.0, only browser environments are supported out of the box (the default entropy source being `window.crypto.getRandomValues`). But with minimal additional work, you can inject any other entropy source (e.g. for using crypto-random in a Node.js environment). For more information, see the **Entropy sources** section below.
+From version 2.0, only browser environments are supported out of the box (the default entropy source being `window.crypto.getRandomValues`). But with minimal additional work, you can inject any other entropy source (e.g. for using crypto-random in a Node.js environment). For more information, see the [Using other entropy sources](#using-other-entropy-sources) section below.
 
 ## API
 
