@@ -67,7 +67,7 @@ jobs:
             - name: Test the code
               run: npm run test
             - name: Scan the code with SonarCloud
-              if: github.event_name == 'push' && matrix.node == 13
+              if: matrix.node == 13
               uses: sonarsource/sonarcloud-github-action@v1.1
               env:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
