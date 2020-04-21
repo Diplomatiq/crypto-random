@@ -1,4 +1,6 @@
-# crypto-random
+<p align="center">
+  <img src="logo.png" width="500px">
+</p>
 
 TypeScript library for generating cryptographically strong, uniformly distributed random integers from custom intervals, strings from custom character sets, and boolean values.
 
