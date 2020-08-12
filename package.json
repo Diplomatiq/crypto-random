@@ -42,7 +42,7 @@
     "@commitlint/cli": "^8.1.0",
     "@diplomatiq/eslint-config-tslib": "^3.0.0",
     "@types/chai": "^4.1.7",
-    "@types/mocha": "^7.0.1",
+    "@types/mocha": "^8.0.2",
     "@types/node": "^13.1.0",
     "@types/sinon": "^9.0.0",
     "chai": "^4.2.0",
