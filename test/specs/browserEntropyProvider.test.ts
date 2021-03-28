@@ -8,13 +8,13 @@ describe('BrowserEntropyProvider', (): void => {
     let entropyProvider: EntropyProvider;
 
     before((): void => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         global.window = windowMock();
     });
 
     after((): void => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         global.window = undefined;
     });
@@ -41,7 +41,7 @@ describe('BrowserEntropyProvider', (): void => {
     });
 
     it('should throw if window is not available', (): void => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         global.window = undefined;
 
@@ -50,16 +50,20 @@ describe('BrowserEntropyProvider', (): void => {
             new BrowserEntropyProvider();
             expect.fail('did not throw');
         } catch (e) {
-            expect(e.message).to.equal('window.crypto.getRandomValues is not available');
+            if (e instanceof Error) {
+                expect(e.message).to.equal('window.crypto.getRandomValues is not available');
+            } else {
+                expect.fail('exception is not of type Error');
+            }
         }
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         global.window = windowMock();
     });
 
     it('should throw if window.crypto is not available', (): void => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         global.window.crypto = undefined;
 
@@ -68,16 +72,20 @@ describe('BrowserEntropyProvider', (): void => {
             new BrowserEntropyProvider();
             expect.fail('did not throw');
         } catch (e) {
-            expect(e.message).to.equal('window.crypto.getRandomValues is not available');
+            if (e instanceof Error) {
+                expect(e.message).to.equal('window.crypto.getRandomValues is not available');
+            } else {
+                expect.fail('exception is not of type Error');
+            }
         }
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         global.window = windowMock();
     });
 
     it('should throw if window.crypto.getRandomValues is not available', (): void => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         global.window.crypto.getRandomValues = undefined;
 
@@ -86,23 +94,31 @@ describe('BrowserEntropyProvider', (): void => {
             new BrowserEntropyProvider();
             expect.fail('did not throw');
         } catch (e) {
-            expect(e.message).to.equal('window.crypto.getRandomValues is not available');
+            if (e instanceof Error) {
+                expect(e.message).to.equal('window.crypto.getRandomValues is not available');
+            } else {
+                expect.fail('exception is not of type Error');
+            }
         }
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         global.window = windowMock();
     });
 
     it('should throw if browserCrypto is undefined', async (): Promise<void> => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         entropyProvider.crypto = undefined;
 
         try {
             await entropyProvider.getRandomValues(new Uint8Array(1));
         } catch (e) {
-            expect(e.message).to.equal('AssertError: no crypto');
+            if (e instanceof Error) {
+                expect(e.message).to.equal('AssertError: no crypto');
+            } else {
+                expect.fail('exception is not of type Error');
+            }
         }
     });
 });
