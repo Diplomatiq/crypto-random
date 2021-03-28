@@ -254,7 +254,7 @@ This library generates its random values following a discrete uniform distributi
 
 ## Development
 
-See [CONTRIBUTING.md](https://github.com/Diplomatiq/crypto-random/blob/develop/CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](https://github.com/Diplomatiq/crypto-random/blob/main/CONTRIBUTING.md) for details.
 
 ---
 
