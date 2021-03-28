@@ -24,10 +24,6 @@ TypeScript library for generating cryptographically strong, uniformly distribute
 <a href="https://github.com/Diplomatiq/crypto-random/blob/main/LICENSE" target="_blank" style="text-decoration: none;">
   <img src="https://img.shields.io/npm/l/@diplomatiq/crypto-random.svg" alt="license">
 </a>
-
-<a href="https://github.com/Diplomatiq/crypto-random/pulls" target="_blank" style="text-decoration: none;">
-  <img src="https://api.dependabot.com/badges/status?host=github&repo=Diplomatiq/crypto-random" alt="Dependabot">
-</a>
 </p>
 
 ---
