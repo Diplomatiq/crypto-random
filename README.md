@@ -21,40 +21,12 @@ TypeScript library for generating cryptographically strong, uniformly distribute
   <img src="https://img.shields.io/npm/v/@diplomatiq/crypto-random.svg" alt="latest released version on npm">
 </a>
 
-<a href="https://github.com/Diplomatiq/crypto-random/blob/master/LICENSE" target="_blank" style="text-decoration: none;">
+<a href="https://github.com/Diplomatiq/crypto-random/blob/main/LICENSE" target="_blank" style="text-decoration: none;">
   <img src="https://img.shields.io/npm/l/@diplomatiq/crypto-random.svg" alt="license">
-</a>
-</p>
-
-<p>
-<a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=alert_status" alt="Quality Gate">
-</a>
-
-<a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=coverage" alt="Coverage">
-</a>
-
-<a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=sqale_rating" alt="Maintainability Rating">
-</a>
-
-<a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=reliability_rating" alt="Reliability Rating">
-</a>
-
-<a href="https://sonarcloud.io/dashboard?id=Diplomatiq_crypto-random" target="_blank" style="text-decoration: none;">
-  <img src="https://sonarcloud.io/api/project_badges/measure?project=Diplomatiq_crypto-random&metric=security_rating" alt="Security Rating">
 </a>
 
 <a href="https://github.com/Diplomatiq/crypto-random/pulls" target="_blank" style="text-decoration: none;">
   <img src="https://api.dependabot.com/badges/status?host=github&repo=Diplomatiq/crypto-random" alt="Dependabot">
-</a>
-</p>
-
-<p>
-<a href="https://gitter.im/Diplomatiq/crypto-random" target="_blank" style="text-decoration: none;">
-  <img src="https://badges.gitter.im/Diplomatiq/crypto-random.svg" alt="Gitter">
 </a>
 </p>
 
