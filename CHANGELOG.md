@@ -1,3 +1,7 @@
+# [3.0.0](https://github.com/Diplomatiq/crypto-random/compare/v2.2.0...v3.0.0) (2021-03-28)
+
+
+
 <a name="2.2.0"></a>
 # [2.2.0](https://github.com/Diplomatiq/crypto-random/compare/v2.1.0...v2.2.0) (2020-03-14)
 
