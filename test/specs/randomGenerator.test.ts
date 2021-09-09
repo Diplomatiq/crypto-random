@@ -633,7 +633,7 @@ describe('RandomGenerator', (): void => {
                 };
 
                 try {
-                    await randomGeneratorInstance.string((fakeString as unknown) as string, 1);
+                    await randomGeneratorInstance.string(fakeString as unknown as string, 1);
                     expect.fail('did not throw');
                 } catch (e) {
                     if (e instanceof Error) {
